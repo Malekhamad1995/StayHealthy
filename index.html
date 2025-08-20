@@ -281,9 +281,15 @@
 </head>
 <body data-theme="dark">
     <div class="form-container mx-4" style="margin-top: 4rem;">
-      <div class="language-toggle">
-        <button id="lang-ar" class="btn px-4 py-1 active-lang">عربي</button>
-        <button id="lang-en" class="btn px-4 py-1">En</button>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="language-toggle">
+          <button id="lang-ar" class="btn px-4 py-1 active-lang">عربي</button>
+          <button id="lang-en" class="btn px-4 py-1">En</button>
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <a href="tel:+962781050305" title="اتصال مباشر" style="background: #25d366; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 22px;"><span>📞</span></a>
+          <a href="tel:+962781664242" title="اتصال مباشر" style="background: #25d366; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 22px;"><span>📞</span></a>
+        </div>
       </div>
       <!-- <div class="theme-toggle">
         <button id="theme-dark" class="btn px-2 py-1 active-theme">داكن</button>
@@ -646,6 +652,14 @@
       <div id="thank-you" class="hidden text-center">
         <h2 class="text-3xl font-bold mb-4 text-green-400">شكراً لك! ✨</h2>
         <p class="mb-4 text-lg">تم إرسال إجاباتك بنجاح. ستصلك خطتك الغذائية والرياضية خلال 24 ساعة.</p>
+        <div class="mb-4">
+          <label class="block mb-2">اختر رقم الواتساب لإرسال النتائج:</label>
+          <select id="whatsapp-number" class="input-field w-full max-w-xs mx-auto">
+            <option value="962781050305">+962781050305</option>
+            <option value="962781664242">+962781664242</option>
+          </select>
+        </div>
+        <button type="button" id="send-whatsapp" class="btn-primary mt-2">إرسال النتائج على واتساب</button>
         <button type="button" id="restart" class="btn-primary mt-4">إعادة التعبئة</button>
       </div>
     </div>
@@ -701,11 +715,11 @@
           if (!input.value) {
             errorMessage = "هذا الحقل مطلوب";
             isValid = false;
-          } else if (input.name === "weight" && parseFloat(input.value) < 45) {
-            errorMessage = "الوزن يجب أن لا يقل عن 45 كغ";
+          } else if (input.name === "weight" && (parseFloat(input.value) < 45 || parseFloat(input.value) > 250)) {
+            errorMessage = "الوزن يجب أن يكون بين 45 و 250 كغ";
             isValid = false;
-          } else if (input.name === "height" && parseFloat(input.value) < 130) {
-            errorMessage = "الطول يجب أن لا يقل عن 130 سم";
+          } else if (input.name === "height" && (parseFloat(input.value) < 130 || parseFloat(input.value) > 250)) {
+            errorMessage = "الطول يجب أن يكون بين 130 و 250 سم";
             isValid = false;
           }
 
@@ -731,8 +745,7 @@
       }
 
       startBtn.addEventListener("click", () => {
-        currentStep++;
-        showStep(currentStep);
+  // تم نقل التفعيل إلى DOMContentLoaded لتجنب التكرار أو التعارض
       });
 
       nextBtn.addEventListener("click", () => {
@@ -756,11 +769,11 @@
       });
 
       restartBtn.addEventListener("click", () => {
-        form.reset();
-        currentStep = 0;
-        showStep(currentStep);
-        form.classList.remove("hidden");
-        thankYou.classList.add("hidden");
+  form.reset();
+  currentStep = 0;
+  showStep(currentStep);
+  form.classList.remove("hidden");
+  thankYou.classList.add("hidden");
       });
 
       document.querySelectorAll("select").forEach((select) => {
@@ -1240,30 +1253,50 @@
         document.getElementById("lang-en").classList.toggle("active-lang", lang === "en");
 
         const t = translations[lang];
-        document.querySelector(".intro-container h2").textContent = t.introTitle;
-        document.querySelector(".intro-container p").textContent = t.introText;
-        document.querySelector(".intro-container .program-links a:nth-child(1)").textContent = t.programLinks.nutrition;
-        document.querySelector(".intro-container .program-links a:nth-child(2)").textContent = t.programLinks.fitness;
-        document.querySelector(".testimonials-container h2").textContent = t.testimonialsTitle;
+        const introH2 = document.querySelector(".intro-container h2");
+        if (introH2) introH2.textContent = t.introTitle;
+        const introP = document.querySelector(".intro-container p");
+        if (introP) introP.textContent = t.introText;
+        const nutritionA = document.querySelector(".intro-container .program-links a:nth-child(1)");
+        if (nutritionA) nutritionA.textContent = t.programLinks.nutrition;
+        const fitnessA = document.querySelector(".intro-container .program-links a:nth-child(2)");
+        if (fitnessA) fitnessA.textContent = t.programLinks.fitness;
+        const testimonialsH2 = document.querySelector(".testimonials-container h2");
+        if (testimonialsH2) testimonialsH2.textContent = t.testimonialsTitle;
         document.querySelectorAll(".testimonial-card").forEach((card, index) => {
-          card.querySelector("p").textContent = t.testimonials[index].text;
-          card.querySelector("span").textContent = t.testimonials[index].name;
+          const p = card.querySelector("p");
+          const span = card.querySelector("span");
+          if (p) p.textContent = t.testimonials[index]?.text || "";
+          if (span) span.textContent = t.testimonials[index]?.name || "";
         });
-        document.querySelector("#step-0 h2").textContent = t.startTitle;
-        document.querySelector("#step-0 p").textContent = t.startText;
-        document.querySelector("#start-survey").textContent = t.start;
-        document.querySelector("#step-1 h1").textContent = t.title;
-        document.querySelector("#step-1 > div.text-center > p:nth-of-type(1)").textContent = t.subtitle;
-        document.querySelector("#step-1 > div.text-center > p:nth-of-type(2)").textContent = t.offer;
-        prevBtn.textContent = t.prev;
-        nextBtn.textContent = t.next;
-        submitBtn.textContent = t.submit;
-        thankYou.querySelector("h2").textContent = t.thankYou;
-        thankYou.querySelector("p").textContent = t.thankYouMessage;
-        restartBtn.textContent = t.restart;
-        document.querySelector("#step-5 h2").textContent = t.subscriptionTitle;
-        document.getElementById("theme-dark").textContent = t.themeLabels.dark;
-        document.getElementById("theme-light").textContent = t.themeLabels.light;
+        const step0H2 = document.querySelector("#step-0 h2");
+        if (step0H2) step0H2.textContent = t.startTitle;
+        const step0P = document.querySelector("#step-0 p");
+        if (step0P) step0P.textContent = t.startText;
+        const startSurveyBtn = document.querySelector("#start-survey");
+        if (startSurveyBtn) startSurveyBtn.textContent = t.start;
+        const step1H1 = document.querySelector("#step-1 h1");
+        if (step1H1) step1H1.textContent = t.title;
+        const step1P1 = document.querySelector("#step-1 > div.text-center > p:nth-of-type(1)");
+        if (step1P1) step1P1.textContent = t.subtitle;
+        const step1P2 = document.querySelector("#step-1 > div.text-center > p:nth-of-type(2)");
+        if (step1P2) step1P2.textContent = t.offer;
+        if (prevBtn) prevBtn.textContent = t.prev;
+        if (nextBtn) nextBtn.textContent = t.next;
+        if (submitBtn) submitBtn.textContent = t.submit;
+        if (thankYou) {
+          const thankYouH2 = thankYou.querySelector("h2");
+          if (thankYouH2) thankYouH2.textContent = t.thankYou;
+          const thankYouP = thankYou.querySelector("p");
+          if (thankYouP) thankYouP.textContent = t.thankYouMessage;
+        }
+        if (restartBtn) restartBtn.textContent = t.restart;
+        const step5H2 = document.querySelector("#step-5 h2");
+        if (step5H2) step5H2.textContent = t.subscriptionTitle;
+        const themeDarkBtn = document.getElementById("theme-dark");
+        if (themeDarkBtn) themeDarkBtn.textContent = t.themeLabels.dark;
+        const themeLightBtn = document.getElementById("theme-light");
+        if (themeLightBtn) themeLightBtn.textContent = t.themeLabels.light;
 
         document.querySelectorAll("label.block").forEach((label) => {
           const inputName = label.nextElementSibling?.name || label.nextElementSibling?.id;
@@ -1322,20 +1355,139 @@
 
       function updateTheme(theme) {
         document.body.setAttribute("data-theme", theme);
-        document.getElementById("theme-dark").classList.toggle("active-theme", theme === "dark");
-        document.getElementById("theme-light").classList.toggle("active-theme", theme === "light");
+        const themeDarkBtn = document.getElementById("theme-dark");
+        const themeLightBtn = document.getElementById("theme-light");
+        if (themeDarkBtn) themeDarkBtn.classList.toggle("active-theme", theme === "dark");
+        if (themeLightBtn) themeLightBtn.classList.toggle("active-theme", theme === "light");
       }
 
-      langAr.addEventListener("click", () => updateLabels("ar"));
-      langEn.addEventListener("click", () => updateLabels("en"));
-      themeDark.addEventListener("click", () => updateTheme("dark"));
-      themeLight.addEventListener("click", () => updateTheme("light"));
+      const langArBtn = document.getElementById("lang-ar");
+      const langEnBtn = document.getElementById("lang-en");
+      const themeDarkBtn = document.getElementById("theme-dark");
+      const themeLightBtn = document.getElementById("theme-light");
+      if (langArBtn) langArBtn.addEventListener("click", () => updateLabels("ar"));
+      if (langEnBtn) langEnBtn.addEventListener("click", () => updateLabels("en"));
+      if (themeDarkBtn) themeDarkBtn.addEventListener("click", () => updateTheme("dark"));
+      if (themeLightBtn) themeLightBtn.addEventListener("click", () => updateTheme("light"));
 
       document.addEventListener("DOMContentLoaded", () => {
         showStep(0);
         updateTheme("dark");
         updateLabels("ar");
-      });
+        // تأكد من تفعيل زر ابدأ الآن بشكل صحيح
+        const startBtn = document.getElementById("start-survey");
+        if (startBtn) {
+          startBtn.onclick = function() {
+            currentStep = 1;
+            showStep(currentStep);
+          };
+        }
+    });
+
+    // تفعيل زر واتساب بعد ظهور رسالة الشكر
+    function enableWhatsappButton() {
+      const whatsappBtn = document.getElementById("send-whatsapp");
+      if (whatsappBtn) {
+        whatsappBtn.onclick = function() {
+          const formData = new FormData(form);
+          // تعريف المفاتيح بالعربي
+          const labels = {
+            full_name: "الاسم الكامل",
+            age: "العمر",
+            gender: "الجنس",
+            weight: "الوزن الحالي",
+            height: "الطول",
+            target_weight: "الوزن المستهدف",
+            location: "المحافظة",
+            phone: "رقم الهاتف",
+            food_exclude: "الأطعمة التي لا ترغب بها",
+            allergy: "الحساسية الغذائية",
+            allergy_other: "توضيح الحساسية",
+            digestive_issue: "مشاكل هضمية",
+            digestive_other: "توضيح المشكلة الهضمية",
+            disease: "أمراض",
+            disease_other: "توضيح المرض",
+            diet: "النظام الغذائي",
+            diet_other: "توضيح النظام الغذائي",
+            meals: "عدد الوجبات المفضلة",
+            home_meals: "وجبات من البيت",
+            soda: "مشروبات غازية أو طاقة",
+            emotional_eating: "نهم أو أكل عاطفي",
+            water: "كم كوب ماء يوميًا",
+            exercise_status: "هل تمارس الرياضة",
+            exercise_frequency: "كم مرة تمرن أسبوعيًا",
+            injury: "إصابات أو مشاكل صحية",
+            injury_other: "توضيح الإصابة",
+            exercise_location: "مكان التمارين",
+            fitness_level: "مستوى اللياقة",
+            equipment: "أدوات رياضية في البيت",
+            equipment_other: "توضيح الأداة",
+            workout_time: "أوقات التمرين",
+            daily_sugar: "تناول السكريات يوميًا",
+            subscription: "الخطة المختارة"
+          };
+          // ترجمة القيم الإنجليزية للعربي
+          const valueMap = {
+            male: "ذكر", female: "أنثى",
+            Amman: "عمان", Zarqa: "الزرقاء", Irbid: "إربد", Aqaba: "العقبة", Madaba: "مادبا", Ajloun: "عجلون", Jerash: "جرش", "Ma'an": "معان", Karak: "الكرك", Balqa: "البلقاء", Mafraq: "المفرق", Tafilah: "الطفيلة",
+            fish: "سمك", red_meat: "لحوم حمراء", chicken: "دجاج", eggs: "بيض", fried: "مقالي", sweets: "حلويات", canned: "معلبات", white_bread: "خبز أبيض", gluten: "غلوتين", dairy: "حليب ومشتقاته", none: "لا يوجد",
+            gluten: "غلوتين", milk: "حليب", eggs: "بيض", nuts: "مكسرات", soy: "صويا", other: "أخرى",
+            ibs: "قولون عصبي", acidity: "حموضة", bloating: "انتفاخ", constipation: "إمساك مزمن", diarrhea: "إسهال متكرر", discomfort: "عدم راحة بعد الطعام",
+            diabetes: "سكري", hypertension: "ضغط دم", insulin_resistance: "مقاومة أنسولين",
+            vegetarian: "نباتي", vegan: "نباتي بدون ألبان", keto: "كيتو", low_carb: "منخفض كربوهيدرات", gluten_free: "بدون غلوتين", lactose_free: "بدون لاكتوز",
+            home_only: "من البيت فقط", sometimes_out: "أحياناً أطلب من الخارج", simple_recipes: "وصفات بسيطة", ready_meals: "وصفات جاهزة وسريعة",
+            daily: "يوميًا", sometimes: "أحيانًا", reduce: "أريد تقليلها", stress: "عند التوتر",
+            boredom: "عند الملل", regular: "بإنتظام", stopped: "كنت أتمرن وتوقفت",
+            beginner: "مبتدئ", intermediate: "متوسط", advanced: "متقدم",
+            mat: "فرشة", dumbbells: "دامبلز", resistance_bands: "مقاومات", bike: "دراجة ثابتة", treadmill: "جهاز سير",
+            morning_before: "صباحًا قبل العمل", morning_after: "صباحًا بعد الإفطار", afternoon: "بعد الظهر", evening: "بعد المغرب", night: "بعد العشاء", flexible: "حسب وقت الفراغ",
+            "3_5": "3–5 أكواب", "6_8": "6–8 أكواب", less_3: "أقل من 3 أكواب", more_8: "أكثر من 8 أكواب",
+            home: "في المنزل", gym: "في النادي", outdoor: "في الخارج", no_preference: "لا فرق",
+            subscription: {"10": "10 دنانير / شهر", "15": "15 دينار / 3 أشهر", "45": "45 دينار / 6 أشهر"},
+            knee: "مشاكل في الركب", back: "مشاكل في الظهر", breathing: "مشاكل في التنفس", fitness: "ضعف اللياقة", injury_other: "أخرى"
+          };
+          let answers = {};
+          for (let [key, value] of formData.entries()) {
+            if (value) {
+              if (key === "phone") {
+                value = value.replace(/[٠-٩]/g, d => "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(d)]);
+              }
+              // ترجمة القيم إذا كانت موجودة في valueMap
+              if (valueMap[key] && valueMap[key][value]) {
+                value = valueMap[key][value];
+              } else if (valueMap[value]) {
+                value = valueMap[value];
+              }
+              if (answers[key]) {
+                answers[key] += `، ${value}`;
+              } else {
+                answers[key] = value;
+              }
+            }
+          }
+          // بناء الرسالة بالعربي ومنسقة
+          let msg = "استبيان اشتراك برنامج خليك هيلثي:\n\n";
+          Object.keys(labels).forEach(key => {
+            if (answers[key]) {
+              msg += `• ${labels[key]}: ${answers[key]}\n`;
+            }
+          });
+          msg += "\nشكراً لاختيارك خليك هيلثي!";
+          const number = document.getElementById("whatsapp-number").value;
+          window.open(`https://wa.me/${number}?text=${encodeURIComponent(msg)}`, "_blank");
+        };
+      }
+    }
+
+    // تفعيل الزر بعد ظهور رسالة الشكر
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (validateStep(currentStep)) {
+        form.classList.add("hidden");
+        thankYou.classList.remove("hidden");
+        enableWhatsappButton();
+      }
+    });
     </script>
 </body>
 </html>
