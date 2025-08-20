@@ -284,9 +284,9 @@
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <div class="language-toggle">
           <button id="lang-ar" class="btn px-4 py-1 active-lang">عربي</button>
-          <button id="lang-en" class="btn px-4 py-1">En</button>
+          <!-- <button id="lang-en" class="btn px-4 py-1">En</button> -->
         </div>
-        <div   style="display: flex;gap: 10px;position: absolute;z-index: 1;top: 1%">
+        <div style="display: flex; gap: 10px; position: absolute; z-index: 1; top: 1%; flex-direction: row-reverse;">
           <a href="tel:+962781050305" title="اتصال مباشر" style="background: #25d366; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 22px;"><span>📞</span></a>
           <a href="tel:+962781664242" title="اتصال مباشر" style="background: #25d366; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 22px;"><span>📞</span></a>
         </div>
@@ -303,7 +303,7 @@
           <p>انضم إلينا اليوم واكتشف برنامجًا غذائيًا ورياضيًا مصممًا خصيصًا لأهدافك! سواء كنت تسعى لفقدان الوزن، زيادة اللياقة، أو تحسين صحتك العامة، نحن هنا لدعمك في كل خطوة. املأ الاستبيان الآن واستعد لتحقيق النتائج التي تحلم بها!</p>
           <div class="program-links">
             <a href="/nutrition_plan_sample.pdf" download class="btn-primary">عينة خطة غذائية</a>
-            <a href="/fitness_plan_sample.pdf" download class="btn-primary">عينة خطة رياضية</a>
+            <a href="files/advan.pdf" download class="btn-primary">عينة خطة رياضية</a>
           </div>
         </div>
         <div class="testimonials-container">
@@ -745,7 +745,8 @@
       }
 
       startBtn.addEventListener("click", () => {
-  // تم نقل التفعيل إلى DOMContentLoaded لتجنب التكرار أو التعارض
+  currentStep = 1;
+  showStep(currentStep);
       });
 
       nextBtn.addEventListener("click", () => {
