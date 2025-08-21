@@ -1,1395 +1,1532 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>برنامج التغذية واللياقة المخصص</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
-    <style>
-      :root {
-        --bg-gradient-start: #1e3a2b;
-        --bg-gradient-end: #00c04b;
-        --text-color: #f0f8f4;
-        --primary-accent: #81b29a;
-        --highlight-color: #a3e635;
-        --card-bg: rgba(255, 255, 255, 0.05);
-        --card-bg-alt: rgba(255, 255, 255, 0.08);
-        --error-color: #ef4444;
-      }
-
-      [data-theme="light"] {
-        --bg-gradient-start: #f0f8f4;
-        --bg-gradient-end: #00c04b;
-        --text-color: #1e3a2b;
-        --primary-accent: #81b29a;
-        --highlight-color: #a3e635;
-        --card-bg: rgba(0, 0, 0, 0.05);
-        --card-bg-alt: rgba(0, 0, 0, 0.08);
-        --error-color: #ef4444;
-      }
-
-      body {
-        font-family: "Tajawal", sans-serif;
-        background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-        color: var(--text-color);
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: start;
-      }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>برنامج التغذية واللياقة المخصص</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap"
+    rel="stylesheet">
+  <style>
+    @media (max-width: 640px) {
       .form-container {
-        max-width: 800px;
-        background: var(--card-bg);
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 4.5rem;
-        border-radius: 2rem;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        position: relative;
+        padding: 0.7rem !important;
+        border-radius: 0.7rem !important;
+        max-width: 100vw !important;
       }
-      .progress-bar-container {
-        background: rgba(255, 255, 255, 0.2);
-        height: 10px;
-        border-radius: 5px;
-        overflow: hidden;
-        margin-bottom: 2rem;
-      }
-      select.input-field option {
-        background: rgba(129, 178, 154, 0.2);
-        color: #000000;
-      }
-      .input-field:focus {
-        outline: none;
-        border-color: var(--primary-accent);
-        box-shadow: 0 0 0 2px rgba(129, 178, 154, 0.5);
-      }
-      .progress {
-        background: var(--primary-accent);
-        height: 100%;
-        transition: width 0.4s ease;
-      }
-      .form-step {
-        display: none;
-        animation: fadeIn 0.6s ease-in-out;
-      }
-      .form-step.active {
-        display: block;
-      }
-      .language-toggle, .theme-toggle {
-        position: absolute;
-        top: 19px;
-        left: 21px;
-        display: flex;
-        gap: 0.5rem;
-      }
-      .theme-toggle {
-        left: 120px;
-      }
-      .language-toggle .btn, .theme-toggle .btn {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: var(--text-color);
-        font-family: "Poppins", sans-serif;
-        font-weight: 600;
-        border-radius: 9999px;
-        transition: all 0.3s ease;
-        padding: 0.25rem 0.75rem;
-        font-size: 0.875rem;
-      }
-      .language-toggle .btn.active-lang, .theme-toggle .btn.active-theme {
-        background-color: var(--primary-accent);
-        color: var(--bg-gradient-start);
-      }
-      .btn-primary {
-        background-color: var(--primary-accent);
-        color: var(--bg-gradient-start);
-        font-weight: bold;
-        padding: 0.75rem 2rem;
-        border-radius: 9999px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-      }
-      .btn-primary:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(129, 178, 154, 0.5);
-      }
-      .btn-secondary {
-        background-color: rgba(255, 255, 255, 0.1);
-        color: var(--text-color);
-        font-weight: bold;
-        padding: 0.75rem 2rem;
-        border-radius: 9999px;
-        transition: all 0.3s ease;
-      }
-      .btn-secondary:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-      }
+
       .input-field {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 0.75rem 1rem;
-        border-radius: 0.75rem;
-        color: var(--text-color);
-        transition: all 0.3s ease;
+        font-size: 0.95rem !important;
+        padding: 0.4rem 0.5rem !important;
+        margin-bottom: 0.7rem !important;
       }
-      .input-field:focus {
-        outline: none;
-        border-color: var(--primary-accent);
-        box-shadow: 0 0 0 2px rgba(129, 178, 154, 0.5);
-      }
-      .input-field.error {
-        border-color: var(--error-color);
-      }
-      .error-message {
-        color: var(--error-color);
-        font-size: 0.875rem;
-        margin-top: 0.25rem;
-        display: none;
-      }
+
       label.block {
-        font-size: 1.125rem;
-        margin-bottom: 0.5rem;
-        font-weight: 600;
+        font-size: 1rem !important;
+        margin-bottom: 0.3rem !important;
       }
-      .checkbox-label {
-        margin-left: 0.5rem;
-        margin-right: 0;
+
+      .btn-primary,
+      .btn-secondary {
+        padding: 0.5rem 1.2rem !important;
+        font-size: 1rem !important;
       }
-      input[type="checkbox"] {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-        display: inline-block;
-        width: 1rem;
-        height: 1rem;
-        background-color: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 0.25rem;
-        position: relative;
-        cursor: pointer;
+
+      .grid,
+      .grid.grid-cols-1,
+      .grid.grid-cols-2,
+      .grid.grid-cols-3,
+      .grid.md\:grid-cols-2 {
+        grid-template-columns: 1fr !important;
       }
-      input[type="checkbox"]:checked {
-        background-color: var(--primary-accent);
-        border-color: var(--primary-accent);
+
+      .form-step {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
       }
-      input[type="checkbox"]:checked::after {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 0.3rem;
-        height: 0.6rem;
-        border: solid var(--bg-gradient-start);
-        border-width: 0 2px 2px 0;
-        transform: translate(-50%, -60%) rotate(45deg);
+
+      .error-message {
+        font-size: 0.9rem !important;
       }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+    }
+
+    :root {
+      --bg-gradient-start: #1e3a2b;
+      --bg-gradient-end: #00c04b;
+      --text-color: #f0f8f4;
+      --primary-accent: #00ff84;
+      --highlight-color: #a3e635;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-bg-alt: rgba(255, 255, 255, 0.08);
+      --error-color: #ef4444;
+    }
+
+    [data-theme="light"] {
+      --bg-gradient-start: #f0f8f4;
+      --bg-gradient-end: #00c04b;
+      --text-color: #1e3a2b;
+      --primary-accent: #81b29a;
+      --highlight-color: #a3e635;
+      --card-bg: rgba(0, 0, 0, 0.05);
+      --card-bg-alt: rgba(0, 0, 0, 0.08);
+      --error-color: #ef4444;
+    }
+
+    body {
+      font-family: "Tajawal", sans-serif;
+      background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: start;
+    }
+
+    .form-container {
+      max-width: 800px;
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4.5rem;
+      border-radius: 2rem;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      position: relative;
+    }
+
+    .progress-bar-container {
+      background: rgba(255, 255, 255, 0.2);
+      height: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    select.input-field option {
+      background: rgba(129, 178, 154, 0.2);
+      color: #000000;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 2px rgba(129, 178, 154, 0.5);
+    }
+
+    .progress {
+      background: var(--primary-accent);
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+
+    .form-step {
+      display: none;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .form-step.active {
+      display: block;
+    }
+
+    .language-toggle,
+    .theme-toggle {
+      position: absolute;
+      top: 19px;
+      left: 21px;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .theme-toggle {
+      left: 120px;
+    }
+
+    .language-toggle .btn,
+    .theme-toggle .btn {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      border-radius: 9999px;
+      transition: all 0.3s ease;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.875rem;
+    }
+
+    .language-toggle .btn.active-lang,
+    .theme-toggle .btn.active-theme {
+      background-color: var(--primary-accent);
+      color: var(--bg-gradient-start);
+    }
+
+    .btn-primary {
+      background-color: var(--primary-accent);
+      color: var(--bg-gradient-start);
+      font-weight: bold;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(129, 178, 154, 0.5);
+    }
+
+    .btn-secondary {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+      font-weight: bold;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .input-field {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.75rem 1rem;
+      border-radius: 0.75rem;
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 2px rgba(129, 178, 154, 0.5);
+    }
+
+    .input-field.error {
+      border-color: var(--error-color);
+    }
+
+    .error-message {
+      color: var(--error-color);
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+      display: none;
+    }
+
+    label.block {
+      font-size: 1.125rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .checkbox-label {
+      margin-left: 0.5rem;
+      margin-right: 0;
+    }
+
+    input[type="checkbox"] {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 0.25rem;
+      position: relative;
+      cursor: pointer;
+    }
+
+    input[type="checkbox"]:checked {
+      background-color: var(--primary-accent);
+      border-color: var(--primary-accent);
+    }
+
+    input[type="checkbox"]:checked::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0.3rem;
+      height: 0.6rem;
+      border: solid var(--bg-gradient-start);
+      border-width: 0 2px 2px 0;
+      transform: translate(-50%, -60%) rotate(45deg);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
       }
-      .intro-container {
-        background: var(--card-bg-alt);
-        backdrop-filter: blur(10px);
-        border-radius: 1.5rem;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        text-align: center;
-        animation: fadeIn 1s ease-in-out;
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
-      .intro-container h2 {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: var(--highlight-color);
-        margin-bottom: 1rem;
-      }
-      .intro-container p {
-        font-size: 1.25rem;
-        color: var(--text-color);
-        margin-bottom: 1.5rem;
-      }
-      .program-links {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-        margin-top: 1rem;
-      }
-      .program-links a {
-        background-color: var(--primary-accent);
-        color: var(--bg-gradient-start);
-        font-weight: bold;
-        padding: 0.75rem 2rem;
-        border-radius: 9999px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        text-decoration: none;
-      }
-      .program-links a:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(129, 178, 154, 0.5);
-      }
-      .testimonials-container {
-        background: var(--card-bg-alt);
-        backdrop-filter: blur(10px);
-        border-radius: 1.5rem;
-        padding: 2rem;
-        margin-bottom: 2rem;
-      }
-      .testimonials-container h2 {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--highlight-color);
-        text-align: center;
-        margin-bottom: 1.5rem;
-      }
-      .testimonial-card {
-        background: var(--card-bg);
-        padding: 1.5rem;
-        border-radius: 1rem;
-        margin-bottom: 1rem;
-        text-align: center;
-      }
-      .testimonial-card p {
-        font-size: 1rem;
-        color: var(--text-color);
-        margin-bottom: 0.5rem;
-      }
-      .testimonial-card span {
-        font-size: 0.875rem;
-        color: var(--primary-accent);
-        font-weight: 600;
-      }
-      .start-step {
-        text-align: center;
-        animation: fadeIn 1s ease-in-out;
-      }
-      .start-step h2 {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: var(--highlight-color);
-        margin-bottom: 1rem;
-      }
-      .start-step p {
-        font-size: 1.25rem;
-        color: var(--text-color);
-        margin-bottom: 1.5rem;
-      }
-    </style>
+    }
+
+    .intro-container {
+      background: var(--card-bg-alt);
+      backdrop-filter: blur(10px);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .intro-container h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--highlight-color);
+      margin-bottom: 1rem;
+    }
+
+    .intro-container p {
+      font-size: 1.25rem;
+      color: var(--text-color);
+      margin-bottom: 1.5rem;
+    }
+
+    .program-links {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .program-links a {
+      background-color: var(--primary-accent);
+      color: var(--bg-gradient-start);
+      font-weight: bold;
+      padding: 0.75rem 2rem;
+      border-radius: 9999px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      text-decoration: none;
+    }
+
+    .program-links a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(129, 178, 154, 0.5);
+    }
+
+    .testimonials-container {
+      background: var(--card-bg-alt);
+      backdrop-filter: blur(10px);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .testimonials-container h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--highlight-color);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .testimonial-card {
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .testimonial-card p {
+      font-size: 1rem;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .testimonial-card span {
+      font-size: 0.875rem;
+      color: var(--primary-accent);
+      font-weight: 600;
+    }
+
+    .start-step {
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .start-step h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--highlight-color);
+      margin-bottom: 1rem;
+    }
+
+    .start-step p {
+      font-size: 1.25rem;
+      color: var(--text-color);
+      margin-bottom: 1.5rem;
+    }
+  </style>
 </head>
+
 <body data-theme="dark">
-    <div class="form-container mx-4" style="margin-top: 3rem;">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div class="language-toggle">
-          <button id="lang-ar" class="btn px-4 py-1 active-lang">عربي</button>
-          <!-- <button id="lang-en" class="btn px-4 py-1">En</button> -->
-        </div>
-        <div style="display: flex; gap: 10px; position: absolute; z-index: 1; top: 1%; flex-direction: row-reverse;">
-          <a href="tel:+962781050305" title="اتصال مباشر" style="background: #25d366; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 22px;"><span>📞</span></a>
-          <a href="tel:+962781664242" title="اتصال مباشر" style="background: #25d366; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 22px;"><span>📞</span></a>
-        </div>
+  <div class="form-container mx-4" style="margin-top: 3rem;">
+    <div style=" 
+      display: flex;justify-content: space-between;align-items: center;margin-top: 4rem;
+     ">
+      <div class="language-toggle">
+        <button id="lang-ar" class="btn px-4 py-1 active-lang">عربي</button>
+        <!-- <button id="lang-en" class="btn px-4 py-1">En</button> -->
       </div>
-      <!-- <div class="theme-toggle">
+      <div style="display: flex; gap: 10px; position: absolute; z-index: 1; top: 1%; flex-direction: row-reverse;">
+        <a href="tel:+962781050305" title="اتصال مباشر"
+          style="background: #25d366; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 22px;"><span>📞</span></a>
+        <a href="tel:+962781664242" title="اتصال مباشر"
+          style="background: #25d366; color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 22px;"><span>📞</span></a>
+      </div>
+    </div>
+    <!-- <div class="theme-toggle">
         <button id="theme-dark" class="btn px-2 py-1 active-theme">داكن</button>
         <button id="theme-light" class="btn px-2 py-1">فاتح</button>
       </div> -->
 
-      <div class="intro" id="intro">  
-        <div class="intro-container">
-          <img src="img/logo.png" alt="StayHealthy Logo" style="width: 120px; margin: 0 auto 1rem; display: block;">
-          <h2>ابدأ رحلتك نحو حياة أكثر صحة ونشاطًا! 💪</h2>
-          <p>انضم إلينا اليوم واكتشف برنامجًا غذائيًا ورياضيًا مصممًا خصيصًا لأهدافك! سواء كنت تسعى لفقدان الوزن، زيادة اللياقة، أو تحسين صحتك العامة، نحن هنا لدعمك في كل خطوة. املأ الاستبيان الآن واستعد لتحقيق النتائج التي تحلم بها!</p>
-          <div class="program-links">
-            <a href="/nutrition_plan_sample.pdf" download class="btn-primary">عينة خطة غذائية</a>
-            <a href="files/advan.pdf" download class="btn-primary">عينة خطة رياضية</a>
-          </div>
-        </div>
-        <div class="testimonials-container">
-          <h2>ماذا يقول عملاؤنا؟</h2>
-          <div class="testimonial-card">
-            <p>"غير هذا البرنامج حياتي! خسرت 10 كيلو في 3 أشهر وأشعر بالنشاط أكثر من أي وقت مضى!"</p>
-            <span>سارة، عمان</span>
-          </div>
-          <div class="testimonial-card">
-            <p>"الخطة الغذائية كانت سهلة التطبيق ومناسبة لجدولي المزدحم. أنصح بها بشدة!"</p>
-            <span>أحمد، الزرقاء</span>
-          </div>
-          <div class="testimonial-card">
-            <p>"الدعم المستمر والخطة الرياضية جعلتني أحب التمارين. النتائج مذهلة!"</p>
-            <span>لينا، إربد</span>
-          </div>
+    <div class="intro" id="intro">
+      <div class="intro-container">
+        <img src="img/logo.png" alt="StayHealthy Logo" style="width: 120px; margin: 0 auto 1rem; display: block;">
+        <h2>ابدأ رحلتك نحو حياة أكثر صحة ونشاطًا! 💪</h2>
+        <p>انضم إلينا اليوم واكتشف برنامجًا غذائيًا ورياضيًا مصممًا خصيصًا لأهدافك! سواء كنت تسعى لفقدان الوزن، زيادة
+          اللياقة، أو تحسين صحتك العامة، نحن هنا لدعمك في كل خطوة. املأ الاستبيان الآن واستعد لتحقيق النتائج التي تحلم
+          بها!</p>
+        <div class="program-links">
+          <a href="/nutrition_plan_sample.pdf" download class="btn-primary">عينة خطة غذائية</a>
+          <a href="files/advan.pdf" download class="btn-primary">عينة خطة رياضية</a>
         </div>
       </div>
-
-      <div class="progress-bar-container">
-        <div class="progress" id="progress" style="width: 16.67%;"></div>
-      </div>
-      <form id="survey-form">
-        <div class="form-step active" id="step-0">
-          <div class="start-step">
-            <h2>جاهز لتغيير حياتك؟</h2>
-            <p>فوت عبي الاستبيان والك تكون راضي عن نفسك! يلااا بسرعة، خذ دقيقة من وقتك!</p>
-            <button type="button" id="start-survey" class="btn-primary">ابدأ الآن</button>
-          </div>
+      <div class="testimonials-container">
+        <h2>ماذا يقول عملاؤنا؟</h2>
+        <div class="testimonial-card">
+          <p>"غير هذا البرنامج حياتي! خسرت 10 كيلو في 3 أشهر وأشعر بالنشاط أكثر من أي وقت مضى!"</p>
+          <span>سارة، عمان</span>
         </div>
-        <div class="form-step" id="step-1">
-          <div class="text-center">
-            <h1 class="text-4xl font-bold mb-2">برنامج التغذية واللياقة المخصص</h1>
-            <p class="mb-4 text-gray-300">املأ النموذج لتحصل على خطة غذائية ورياضية أسبوعية تناسبك 100٪</p>
-            <p class="text-xl text-green-300 font-bold mb-6">🎉 عرض خاص: اشتراك 3 أشهر بـ 15 دينار فقط! 🎉</p>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label class="block mb-2">الاسم الكامل *</label>
-              <input type="text" name="full_name" class="w-full input-field" required>
-              <div class="error-message" data-for="full_name"></div>
-            </div>
-            <div>
-              <label class="block mb-2">العمر (بالسنوات) *</label>
-              <input type="number" name="age" class="w-full input-field" required>
-              <div class="error-message" data-for="age"></div>
-            </div>
-            <div>
-              <label class="block mb-2">الجنس *</label>
-              <select name="gender" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="male">ذكر</option>
-                <option value="female">أنثى</option>
-              </select>
-              <div class="error-message" data-for="gender"></div>
-            </div>
-            <div>
-              <label class="block mb-2">الوزن الحالي (كغ) *</label>
-              <input type="number" name="weight" class="w-full input-field" min="45" required>
-              <div class="error-message" data-for="weight"></div>
-            </div>
-            <div>
-              <label class="block mb-2">الطول (سم) *</label>
-              <input type="number" name="height" class="w-full input-field" min="130" required>
-              <div class="error-message" data-for="height"></div>
-            </div>
-            <div>
-              <label class="block mb-2">الوزن المستهدف *</label>
-              <input type="number" name="target_weight" class="w-full input-field" required>
-              <div class="error-message" data-for="target_weight"></div>
-            </div>
-            <div>
-              <label class="block mb-2">محافظة الإقامة *</label>
-              <select name="location" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="Amman">عمان</option>
-                <option value="Zarqa">الزرقاء</option>
-                <option value="Irbid">إربد</option>
-                <option value="Aqaba">العقبة</option>
-                <option value="Madaba">مادبا</option>
-                <option value="Ajloun">عجلون</option>
-                <option value="Jerash">جرش</option>
-                <option value="Ma'an">معان</option>
-                <option value="Karak">الكرك</option>
-                <option value="Balqa">البلقاء</option>
-                <option value="Mafraq">المفرق</option>
-                <option value="Tafilah">الطفيلة</option>
-              </select>
-              <div class="error-message" data-for="location"></div>
-            </div>
-            <div>
-              <label class="block mb-2">رقم الهاتف *</label>
-              <input type="tel" name="phone" class="w-full input-field" required>
-              <div class="error-message" data-for="phone"></div>
-            </div>
-          </div>
+        <div class="testimonial-card">
+          <p>"الخطة الغذائية كانت سهلة التطبيق ومناسبة لجدولي المزدحم. أنصح بها بشدة!"</p>
+          <span>أحمد، الزرقاء</span>
         </div>
-        <div class="form-step" id="step-2">
-          <div class="mb-6">
-            <label class="block text-lg mb-4">الأطعمة التي لا ترغب بها *</label>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-3">
-              <label class="flex items-center"><input type="checkbox" name="food_exclude" value="fish" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">الأسماك</span></label>
-              <label class="flex items-center"><input type="checkbox" name="food_exclude" value="red_meat" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">اللحوم الحمراء</span></label>
-              <label class="flex items-center"><input type="checkbox" name="food_exclude" value="chicken" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">الدجاج</span></label>
-              <label class="flex items-center"><input type="checkbox" name="food_exclude" value="eggs" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">البيض</span></label>
-              <label class="flex items-center"><input type="checkbox" name="food_exclude" value="fried" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">الأطعمة المقلية</span></label>
-              <label class="flex items-center"><input type="checkbox" name="food_exclude" value="sweets" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">السكريات والحلويات</span></label>
-              <label class="flex items-center"><input type="checkbox" name="food_exclude" value="canned" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">الأطعمة المعلبة</span></label>
-              <label class="flex items-center"><input type="checkbox" name="food_exclude" value="white_bread" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">الخبز الأبيض</span></label>
-              <label class="flex items-center"><input type="checkbox" name="food_exclude" value="gluten" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">الغلوتين</span></label>
-              <label class="flex items-center"><input type="checkbox" name="food_exclude" value="dairy" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">الحليب ومشتقاته</span></label>
-              <label class="flex items-center"><input type="checkbox" name="food_exclude" value="none" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">لا أرغب بإزالة أي نوع</span></label>
-            </div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label class="block text-lg mb-2">هل لديك حساسية غذائية؟ *</label>
-              <select name="allergy" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="none">لا</option>
-                <option value="gluten">الغلوتين</option>
-                <option value="milk">الحليب</option>
-                <option value="eggs">البيض</option>
-                <option value="nuts">المكسرات</option>
-                <option value="fish">الأسماك</option>
-                <option value="soy">الصويا</option>
-                <option value="other">أخرى</option>
-              </select>
-              <input type="text" name="allergy_other" class="w-full input-field mt-2 hidden" placeholder="حدد الحساسية">
-            </div>
-            <div>
-              <label class="block text-lg mb-2">مشاكل هضمية؟ *</label>
-              <select name="digestive_issue" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="none">لا</option>
-                <option value="ibs">القولون العصبي</option>
-                <option value="acidity">الحموضة</option>
-                <option value="bloating">الانتفاخ</option>
-                <option value="constipation">الإمساك المزمن</option>
-                <option value="diarrhea">الإسهال المتكرر</option>
-                <option value="discomfort">عدم راحة بعد الطعام</option>
-                <option value="other">أخرى</option>
-              </select>
-              <input type="text" name="digestive_other" class="w-full input-field mt-2 hidden" placeholder="حدد المشكلة">
-            </div>
-          </div>
+        <div class="testimonial-card">
+          <p>"الدعم المستمر والخطة الرياضية جعلتني أحب التمارين. النتائج مذهلة!"</p>
+          <span>لينا، إربد</span>
         </div>
-        <div class="form-step" id="step-3">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label class="block text-lg mb-2">هل تعاني من أمراض؟ *</label>
-              <select name="disease" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="none">لا</option>
-                <option value="diabetes">سكري</option>
-                <option value="hypertension">ارتفاع ضغط الدم</option>
-                <option value="insulin_resistance">مقاومة الأنسولين</option>
-                <option value="other">أخرى</option>
-              </select>
-              <input type="text" name="disease_other" class="w-full input-field mt-2 hidden" placeholder="حدد المرض">
-            </div>
-            <div>
-              <label class="block text-lg mb-2">نظام غذائي معين؟ *</label>
-              <select name="diet" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="none">لا، أتناول كل شيء</option>
-                <option value="vegetarian">نباتي</option>
-                <option value="vegan">نباتي لا يتناول ألبان</option>
-                <option value="keto">كيتو</option>
-                <option value="low_carb">دايت منخفض الكربوهيدرات</option>
-                <option value="gluten_free">بدون غلوتين</option>
-                <option value="lactose_free">بدون لاكتوز</option>
-                <option value="other">أخرى</option>
-              </select>
-              <input type="text" name="diet_other" class="w-full input-field mt-2 hidden" placeholder="حدد النظام">
-            </div>
-            <div>
-              <label class="block text-lg mb-2">عدد الوجبات المفضلة؟ *</label>
-              <select name="meals" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="3">3 وجبات</option>
-                <option value="4">4 وجبات</option>
-                <option value="5">5 وجبات</option>
-                <option value="more">أكثر من 5</option>
-                <option value="flexible">حسب جدول عملي</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-lg mb-2">وجبات من البيت؟ *</label>
-              <select name="home_meals" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="home_only">نعم، من البيت فقط</option>
-                <option value="sometimes_out">نعم، ولكن أحيانًا أطلب من الخارج</option>
-                <option value="simple_recipes">لا مانع من وصفات بسيطة</option>
-                <option value="ready_meals">أرغب بوصفات جاهزة وسريعة</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="form-step" id="step-4">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label class="block text-lg mb-2">مشروبات غازية أو طاقة؟ *</label>
-              <select name="soda" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="none">لا</option>
-                <option value="sometimes">أحيانًا</option>
-                <option value="daily">يوميًا</option>
-                <option value="reduce">أريد تقليلها</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-lg mb-2">نهم أو أكل عاطفي؟ *</label>
-              <select name="emotional_eating" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="stress">نعم عند التوتر أو الزعل</option>
-                <option value="boredom">نعم عند الملل</option>
-                <option value="sometimes">أحيانًا فقط</option>
-                <option value="none">لا</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-lg mb-2">كم كوب ماء يوميًا؟ *</label>
-              <select name="water" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="less_3">أقل من 3 أكواب</option>
-                <option value="3_5">3–5 أكواب</option>
-                <option value="6_8">6–8 أكواب</option>
-                <option value="more_8">أكثر من 8 أكواب</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-lg mb-2">هل تمارس الرياضة؟ *</label>
-              <select name="exercise_status" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="regular">نعم، بانتظام</option>
-                <option value="sometimes">نعم، أحيانًا</option>
-                <option value="none">لا أمارس حاليًا</option>
-                <option value="stopped">كنت أتمرن سابقًا وتوقفت</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-lg mb-2">كم مرة تمرن أسبوعيًا؟ *</label>
-              <select name="exercise_frequency" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="2">يومان</option>
-                <option value="3">3 أيام</option>
-                <option value="4">4 أيام</option>
-                <option value="5">5 أيام</option>
-                <option value="6">6 أيام</option>
-                <option value="daily">يوميًا</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-lg mb-2">إصابات أو مشاكل صحية؟ *</label>
-              <select name="injury" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="none">لا</option>
-                <option value="knee">مشاكل في الركب</option>
-                <option value="back">مشاكل في الظهر</option>
-                <option value="breathing">مشاكل في التنفس</option>
-                <option value="fitness">ضعف في اللياقة</option>
-                <option value="other">أخرى</option>
-              </select>
-              <input type="text" name="injury_other" class="w-full input-field mt-2 hidden" placeholder="حدد المشكلة">
-            </div>
-            <div>
-              <label class="block text-lg mb-2">مكان التمارين؟ *</label>
-              <select name="exercise_location" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="home">في المنزل</option>
-                <option value="gym">في النادي</option>
-                <option value="outdoor">في الخارج (الحدائق)</option>
-                <option value="no_preference">لا فرق</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-lg mb-2">مستوى اللياقة؟ *</label>
-              <select name="fitness_level" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="beginner">مبتدئ تمامًا</option>
-                <option value="intermediate">متوسط</option>
-                <option value="advanced">متقدم</option>
-              </select>
-            </div>
-            <div class="col-span-1 md:col-span-2">
-              <label class="block text-lg mb-4">أدوات رياضية في البيت؟ *</label>
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-3">
-                <label class="flex items-center"><input type="checkbox" name="equipment" value="none" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">لا يوجد</span></label>
-                <label class="flex items-center"><input type="checkbox" name="equipment" value="mat" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">بساط/فرشة</span></label>
-                <label class="flex items-center"><input type="checkbox" name="equipment" value="dumbbells" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">دامبلز</span></label>
-                <label class="flex items-center"><input type="checkbox" name="equipment" value="resistance_bands" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">مقاومات</span></label>
-                <label class="flex items-center"><input type="checkbox" name="equipment" value="bike" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">دراجة ثابتة</span></label>
-                <label class="flex items-center"><input type="checkbox" name="equipment" value="treadmill" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">جهاز سير</span></label>
-                <label class="flex items-center"><input type="checkbox" name="equipment" value="other" class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">أخرى</span></label>
-              </div>
-              <input type="text" name="equipment_other" class="w-full input-field mt-2 hidden" placeholder="حدد الأداة">
-            </div>
-            <div>
-              <label class="block text-lg mb-2">أوقات التمرين؟ *</label>
-              <select name="workout_time" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="morning_before">صباحًا قبل العمل</option>
-                <option value="morning_after">صباحًا بعد الإفطار</option>
-                <option value="afternoon">بعد الظهر</option>
-                <option value="evening">بعد المغرب</option>
-                <option value="night">بعد العشاء</option>
-                <option value="flexible">حسب وقت الفراغ</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-lg mb-2">تناول السكريات يوميًا؟ *</label>
-              <select name="daily_sugar" class="w-full input-field" required>
-                <option value="">اختر</option>
-                <option value="daily">نعم، يوميًا</option>
-                <option value="sometimes">أحيانًا</option>
-                <option value="none">لا</option>
-                <option value="stress">فقط عند التوتر</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="form-step" id="step-5">
-          <h2 class="text-3xl font-bold mb-4">اختر خطة الاشتراك</h2>
-          <div class="grid grid-cols-1 gap-4 mb-6">
-            <label class="flex items-center bg-white bg-opacity-10 p-4 rounded-xl cursor-pointer hover:bg-opacity-20 transition-colors">
-              <input type="radio" name="subscription" value="10" class="ml-4 h-5 w-5 text-green-500 rounded focus:ring-green-500" required>
-              <span class="text-lg">10 دنانير / شهر</span>
-            </label>
-            <label class="flex items-center bg-white bg-opacity-10 p-4 rounded-xl cursor-pointer hover:bg-opacity-20 transition-colors">
-              <input type="radio" name="subscription" value="15" class="ml-4 h-5 w-5 text-green-500 rounded focus:ring-green-500">
-              <span class="text-lg">15 دينار / 3 أشهر <span class="text-green-300 font-bold">(عرض محدود)</span></span>
-            </label>
-            <label class="flex items-center bg-white bg-opacity-10 p-4 rounded-xl cursor-pointer hover:bg-opacity-20 transition-colors">
-              <input type="radio" name="subscription" value="45" class="ml-4 h-5 w-5 text-green-500 rounded focus:ring-green-500">
-              <span class="text-lg">45 دينار / 6 أشهر</span>
-            </label>
-          </div>
-        </div>
-        <div class="flex justify-between mt-8">
-          <button type="button" id="prev" class="btn-secondary px-6 hidden">السابق</button>
-          <button type="button" id="next" class="btn-primary px-6">التالي</button>
-          <button type="submit" id="submit" class="btn-primary px-6 hidden">إرسال</button>
-        </div>
-      </form>
-      <div id="thank-you" class="hidden text-center">
-        <h2 class="text-3xl font-bold mb-4 text-green-400">شكراً لك! ✨</h2>
-        <p class="mb-4 text-lg">تم إرسال إجاباتك بنجاح. ستصلك خطتك الغذائية والرياضية خلال 24 ساعة.</p>
-        <div class="mb-4">
-          <label class="block mb-2">اختر رقم الواتساب لإرسال النتائج:</label>
-          <select id="whatsapp-number" class="input-field w-full max-w-xs mx-auto">
-            <option value="962781050305">+962781050305</option>
-            <option value="962781664242">+962781664242</option>
-          </select>
-        </div>
-        <button type="button" id="send-whatsapp" class="btn-primary mt-2">إرسال النتائج على واتساب</button>
-        <button type="button" id="restart" class="btn-primary mt-4">إعادة التعبئة</button>
       </div>
     </div>
-    <script>
-      const form = document.getElementById("survey-form");
-      const steps = document.querySelectorAll(".form-step");
-      const prevBtn = document.getElementById("prev");
-      const nextBtn = document.getElementById("next");
-      const submitBtn = document.getElementById("submit");
-      const startBtn = document.getElementById("start-survey");
-      const progress = document.getElementById("progress");
-      const thankYou = document.getElementById("thank-you");
-      const restartBtn = document.getElementById("restart");
-      const totalSteps = steps.length;
-      let currentStep = 0;
 
-      function updateProgress() {
-        const percentage = ((currentStep + 1) / totalSteps) * 100;
-        progress.style.width = `${percentage}%`;
+    <div class="progress-bar-container">
+      <div class="progress" id="progress" style="width: 16.67%;"></div>
+    </div>
+    <form id="survey-form">
+      <div class="form-step active" id="step-0">
+        <div class="start-step">
+          <h2>جاهز لتغيير حياتك؟</h2>
+          <p>فوت عبي الاستبيان والك تكون راضي عن نفسك! يلااا بسرعة، خذ دقيقة من وقتك!</p>
+          <button type="button" id="start-survey" class="btn-primary">ابدأ الآن</button>
+        </div>
+      </div>
+      <div class="form-step" id="step-1">
+        <div class="text-center">
+          <h1 class="text-4xl font-bold mb-2">برنامج التغذية واللياقة المخصص</h1>
+          <p class="mb-4 text-gray-300">املأ النموذج لتحصل على خطة غذائية ورياضية أسبوعية تناسبك 100٪</p>
+          <p class="text-xl text-green-300 font-bold mb-6">🎉 عرض خاص: اشتراك 3 أشهر بـ 15 دينار فقط! 🎉</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block mb-2">الاسم الكامل *</label>
+            <input type="text" name="full_name" class="w-full input-field" required>
+            <div class="error-message" data-for="full_name"></div>
+          </div>
+          <div>
+            <label class="block mb-2">العمر (بالسنوات) *</label>
+            <input type="number" name="age" class="w-full input-field" required>
+            <div class="error-message" data-for="age"></div>
+          </div>
+          <div>
+            <label class="block mb-2">الجنس *</label>
+            <select name="gender" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="male">ذكر</option>
+              <option value="female">أنثى</option>
+            </select>
+            <div class="error-message" data-for="gender"></div>
+          </div>
+          <div>
+            <label class="block mb-2">الوزن الحالي (كغ) *</label>
+            <input type="number" name="weight" class="w-full input-field" min="45" required>
+            <div class="error-message" data-for="weight"></div>
+          </div>
+          <div>
+            <label class="block mb-2">الطول (سم) *</label>
+            <input type="number" name="height" class="w-full input-field" min="130" required>
+            <div class="error-message" data-for="height"></div>
+          </div>
+          <div>
+            <label class="block mb-2">الوزن المستهدف *</label>
+            <input type="number" name="target_weight" class="w-full input-field" required>
+            <div class="error-message" data-for="target_weight"></div>
+          </div>
+          <div>
+            <label class="block mb-2">محافظة الإقامة *</label>
+            <select name="location" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="Amman">عمان</option>
+              <option value="Zarqa">الزرقاء</option>
+              <option value="Irbid">إربد</option>
+              <option value="Aqaba">العقبة</option>
+              <option value="Madaba">مادبا</option>
+              <option value="Ajloun">عجلون</option>
+              <option value="Jerash">جرش</option>
+              <option value="Ma'an">معان</option>
+              <option value="Karak">الكرك</option>
+              <option value="Balqa">البلقاء</option>
+              <option value="Mafraq">المفرق</option>
+              <option value="Tafilah">الطفيلة</option>
+            </select>
+            <div class="error-message" data-for="location"></div>
+          </div>
+          <div>
+            <label class="block mb-2">رقم الهاتف *</label>
+            <input type="tel" name="phone" class="w-full input-field" required>
+            <div class="error-message" data-for="phone"></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-step" id="step-2">
+        <div class="mb-6">
+          <label class="block text-lg mb-4">الأطعمة التي لا ترغب بها *</label>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-3">
+            <label class="flex items-center"><input type="checkbox" name="food_exclude" value="fish"
+                class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span
+                class="checkbox-label">الأسماك</span></label>
+            <label class="flex items-center"><input type="checkbox" name="food_exclude" value="red_meat"
+                class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">اللحوم
+                الحمراء</span></label>
+            <label class="flex items-center"><input type="checkbox" name="food_exclude" value="chicken"
+                class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span
+                class="checkbox-label">الدجاج</span></label>
+            <label class="flex items-center"><input type="checkbox" name="food_exclude" value="eggs"
+                class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span
+                class="checkbox-label">البيض</span></label>
+            <label class="flex items-center"><input type="checkbox" name="food_exclude" value="fried"
+                class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">الأطعمة
+                المقلية</span></label>
+            <label class="flex items-center"><input type="checkbox" name="food_exclude" value="sweets"
+                class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">السكريات
+                والحلويات</span></label>
+            <label class="flex items-center"><input type="checkbox" name="food_exclude" value="canned"
+                class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">الأطعمة
+                المعلبة</span></label>
+            <label class="flex items-center"><input type="checkbox" name="food_exclude" value="white_bread"
+                class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">الخبز
+                الأبيض</span></label>
+            <label class="flex items-center"><input type="checkbox" name="food_exclude" value="gluten"
+                class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span
+                class="checkbox-label">الغلوتين</span></label>
+            <label class="flex items-center"><input type="checkbox" name="food_exclude" value="dairy"
+                class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">الحليب
+                ومشتقاته</span></label>
+            <label class="flex items-center"><input type="checkbox" name="food_exclude" value="none"
+                class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">لا أرغب
+                بإزالة أي نوع</span></label>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-lg mb-2">هل لديك حساسية غذائية؟ *</label>
+            <select name="allergy" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="none">لا</option>
+              <option value="gluten">الغلوتين</option>
+              <option value="milk">الحليب</option>
+              <option value="eggs">البيض</option>
+              <option value="nuts">المكسرات</option>
+              <option value="fish">الأسماك</option>
+              <option value="soy">الصويا</option>
+              <option value="other">أخرى</option>
+            </select>
+            <input type="text" name="allergy_other" class="w-full input-field mt-2 hidden" placeholder="حدد الحساسية">
+          </div>
+          <div>
+            <label class="block text-lg mb-2">مشاكل هضمية؟ *</label>
+            <select name="digestive_issue" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="none">لا</option>
+              <option value="ibs">القولون العصبي</option>
+              <option value="acidity">الحموضة</option>
+              <option value="bloating">الانتفاخ</option>
+              <option value="constipation">الإمساك المزمن</option>
+              <option value="diarrhea">الإسهال المتكرر</option>
+              <option value="discomfort">عدم راحة بعد الطعام</option>
+              <option value="other">أخرى</option>
+            </select>
+            <input type="text" name="digestive_other" class="w-full input-field mt-2 hidden" placeholder="حدد المشكلة">
+          </div>
+        </div>
+      </div>
+      <div class="form-step" id="step-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-lg mb-2">هل تعاني من أمراض؟ *</label>
+            <select name="disease" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="none">لا</option>
+              <option value="diabetes">سكري</option>
+              <option value="hypertension">ارتفاع ضغط الدم</option>
+              <option value="insulin_resistance">مقاومة الأنسولين</option>
+              <option value="other">أخرى</option>
+            </select>
+            <input type="text" name="disease_other" class="w-full input-field mt-2 hidden" placeholder="حدد المرض">
+          </div>
+          <div>
+            <label class="block text-lg mb-2">نظام غذائي معين؟ *</label>
+            <select name="diet" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="none">لا، أتناول كل شيء</option>
+              <option value="vegetarian">نباتي</option>
+              <option value="vegan">نباتي لا يتناول ألبان</option>
+              <option value="keto">كيتو</option>
+              <option value="low_carb">دايت منخفض الكربوهيدرات</option>
+              <option value="gluten_free">بدون غلوتين</option>
+              <option value="lactose_free">بدون لاكتوز</option>
+              <option value="other">أخرى</option>
+            </select>
+            <input type="text" name="diet_other" class="w-full input-field mt-2 hidden" placeholder="حدد النظام">
+          </div>
+          <div>
+            <label class="block text-lg mb-2">عدد الوجبات المفضلة؟ *</label>
+            <select name="meals" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="3">3 وجبات</option>
+              <option value="4">4 وجبات</option>
+              <option value="5">5 وجبات</option>
+              <option value="more">أكثر من 5</option>
+              <option value="flexible">حسب جدول عملي</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-lg mb-2">وجبات من البيت؟ *</label>
+            <select name="home_meals" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="home_only">نعم، من البيت فقط</option>
+              <option value="sometimes_out">نعم، ولكن أحيانًا أطلب من الخارج</option>
+              <option value="simple_recipes">لا مانع من وصفات بسيطة</option>
+              <option value="ready_meals">أرغب بوصفات جاهزة وسريعة</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-step" id="step-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-lg mb-2">مشروبات غازية أو طاقة؟ *</label>
+            <select name="soda" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="none">لا</option>
+              <option value="sometimes">أحيانًا</option>
+              <option value="daily">يوميًا</option>
+              <option value="reduce">أريد تقليلها</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-lg mb-2">نهم أو أكل عاطفي؟ *</label>
+            <select name="emotional_eating" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="stress">نعم عند التوتر أو الزعل</option>
+              <option value="boredom">نعم عند الملل</option>
+              <option value="sometimes">أحيانًا فقط</option>
+              <option value="none">لا</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-lg mb-2">كم كوب ماء يوميًا؟ *</label>
+            <select name="water" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="less_3">أقل من 3 أكواب</option>
+              <option value="3_5">3–5 أكواب</option>
+              <option value="6_8">6–8 أكواب</option>
+              <option value="more_8">أكثر من 8 أكواب</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-lg mb-2">هل تمارس الرياضة؟ *</label>
+            <select name="exercise_status" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="regular">نعم، بانتظام</option>
+              <option value="sometimes">نعم، أحيانًا</option>
+              <option value="none">لا أمارس حاليًا</option>
+              <option value="stopped">كنت أتمرن سابقًا وتوقفت</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-lg mb-2">كم مرة تمرن أسبوعيًا؟ *</label>
+            <select name="exercise_frequency" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="2">يومان</option>
+              <option value="3">3 أيام</option>
+              <option value="4">4 أيام</option>
+              <option value="5">5 أيام</option>
+              <option value="6">6 أيام</option>
+              <option value="daily">يوميًا</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-lg mb-2">إصابات أو مشاكل صحية؟ *</label>
+            <select name="injury" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="none">لا</option>
+              <option value="knee">مشاكل في الركب</option>
+              <option value="back">مشاكل في الظهر</option>
+              <option value="breathing">مشاكل في التنفس</option>
+              <option value="fitness">ضعف في اللياقة</option>
+              <option value="other">أخرى</option>
+            </select>
+            <input type="text" name="injury_other" class="w-full input-field mt-2 hidden" placeholder="حدد المشكلة">
+          </div>
+          <div>
+            <label class="block text-lg mb-2">مكان التمارين؟ *</label>
+            <select name="exercise_location" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="home">في المنزل</option>
+              <option value="gym">في النادي</option>
+              <option value="outdoor">في الخارج (الحدائق)</option>
+              <option value="no_preference">لا فرق</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-lg mb-2">مستوى اللياقة؟ *</label>
+            <select name="fitness_level" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="beginner">مبتدئ تمامًا</option>
+              <option value="intermediate">متوسط</option>
+              <option value="advanced">متقدم</option>
+            </select>
+          </div>
+          <div class="col-span-1 md:col-span-2">
+            <label class="block text-lg mb-4">أدوات رياضية في البيت؟ *</label>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-3">
+              <label class="flex items-center"><input type="checkbox" name="equipment" value="none"
+                  class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">لا
+                  يوجد</span></label>
+              <label class="flex items-center"><input type="checkbox" name="equipment" value="mat"
+                  class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span
+                  class="checkbox-label">بساط/فرشة</span></label>
+              <label class="flex items-center"><input type="checkbox" name="equipment" value="dumbbells"
+                  class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span
+                  class="checkbox-label">دامبلز</span></label>
+              <label class="flex items-center"><input type="checkbox" name="equipment" value="resistance_bands"
+                  class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span
+                  class="checkbox-label">مقاومات</span></label>
+              <label class="flex items-center"><input type="checkbox" name="equipment" value="bike"
+                  class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">دراجة
+                  ثابتة</span></label>
+              <label class="flex items-center"><input type="checkbox" name="equipment" value="treadmill"
+                  class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span class="checkbox-label">جهاز
+                  سير</span></label>
+              <label class="flex items-center"><input type="checkbox" name="equipment" value="other"
+                  class="ml-2 h-4 w-4 text-green-500 rounded focus:ring-green-500"><span
+                  class="checkbox-label">أخرى</span></label>
+            </div>
+            <input type="text" name="equipment_other" class="w-full input-field mt-2 hidden" placeholder="حدد الأداة">
+          </div>
+          <div>
+            <label class="block text-lg mb-2">أوقات التمرين؟ *</label>
+            <select name="workout_time" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="morning_before">صباحًا قبل العمل</option>
+              <option value="morning_after">صباحًا بعد الإفطار</option>
+              <option value="afternoon">بعد الظهر</option>
+              <option value="evening">بعد المغرب</option>
+              <option value="night">بعد العشاء</option>
+              <option value="flexible">حسب وقت الفراغ</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-lg mb-2">تناول السكريات يوميًا؟ *</label>
+            <select name="daily_sugar" class="w-full input-field" required>
+              <option value="">اختر</option>
+              <option value="daily">نعم، يوميًا</option>
+              <option value="sometimes">أحيانًا</option>
+              <option value="none">لا</option>
+              <option value="stress">فقط عند التوتر</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="form-step" id="step-5">
+        <h2 class="text-3xl font-bold mb-4">اختر خطة الاشتراك</h2>
+        <div class="grid grid-cols-1 gap-4 mb-6">
+          <label
+            class="flex items-center bg-white bg-opacity-10 p-4 rounded-xl cursor-pointer hover:bg-opacity-20 transition-colors">
+            <input type="radio" name="subscription" value="10"
+              class="ml-4 h-5 w-5 text-green-500 rounded focus:ring-green-500" required>
+            <span class="text-lg">10 دنانير / شهر</span>
+          </label>
+          <label
+            class="flex items-center bg-white bg-opacity-10 p-4 rounded-xl cursor-pointer hover:bg-opacity-20 transition-colors">
+            <input type="radio" name="subscription" value="15"
+              class="ml-4 h-5 w-5 text-green-500 rounded focus:ring-green-500">
+            <span class="text-lg">15 دينار / 3 أشهر <span class="text-green-300 font-bold">(عرض محدود)</span></span>
+          </label>
+          <label
+            class="flex items-center bg-white bg-opacity-10 p-4 rounded-xl cursor-pointer hover:bg-opacity-20 transition-colors">
+            <input type="radio" name="subscription" value="45"
+              class="ml-4 h-5 w-5 text-green-500 rounded focus:ring-green-500">
+            <span class="text-lg">45 دينار / 6 أشهر</span>
+          </label>
+        </div>
+      </div>
+      <div class="flex justify-between mt-8">
+        <button type="button" id="prev" class="btn-secondary px-6 hidden">السابق</button>
+        <button type="button" id="next" class="btn-primary px-6">التالي</button>
+        <button type="submit" id="submit" class="btn-primary px-6 hidden">إرسال</button>
+      </div>
+    </form>
+    <div id="thank-you" class="hidden text-center">
+      <h2 class="text-3xl font-bold mb-4 text-green-400">شكراً لك! ✨</h2>
+      <p class="mb-4 text-lg">تم إرسال إجاباتك بنجاح. ستصلك خطتك الغذائية والرياضية خلال 24 ساعة.</p>
+      <div class="mb-4">
+        <label class="block mb-2">اختر رقم الواتساب لإرسال النتائج:</label>
+        <select id="whatsapp-number" class="input-field w-full max-w-xs mx-auto">
+          <option value="962781050305">+962781050305</option>
+          <option value="962781664242">+962781664242</option>
+        </select>
+      </div>
+      <button type="button" id="send-whatsapp" class="btn-primary mt-2">إرسال النتائج على واتساب</button>
+      <button type="button" id="restart" class="btn-primary mt-4">إعادة التعبئة</button>
+    </div>
+  </div>
+  <script>
+    const form = document.getElementById("survey-form");
+    const steps = document.querySelectorAll(".form-step");
+    const prevBtn = document.getElementById("prev");
+    const nextBtn = document.getElementById("next");
+    const submitBtn = document.getElementById("submit");
+    const startBtn = document.getElementById("start-survey");
+    const progress = document.getElementById("progress");
+    const thankYou = document.getElementById("thank-you");
+    const restartBtn = document.getElementById("restart");
+    const totalSteps = steps.length;
+    let currentStep = 0;
+
+    function updateProgress() {
+      const percentage = ((currentStep + 1) / totalSteps) * 100;
+      progress.style.width = `${percentage}%`;
+    }
+
+    function showStep(step) {
+      steps.forEach((s, index) => {
+        s.classList.toggle("active", index === step);
+      });
+      prevBtn.classList.toggle("hidden", step === 0);
+      nextBtn.classList.toggle("hidden", step === totalSteps - 1);
+      submitBtn.classList.toggle("hidden", step !== totalSteps - 1);
+
+      // إخفاء قسم intro عندما تكون الخطوة أكبر من 0
+      const introSection = document.getElementById("intro");
+      if (introSection) {
+        introSection.classList.toggle("hidden", step > 0);
       }
 
-      function showStep(step) {
-        steps.forEach((s, index) => {
-          s.classList.toggle("active", index === step);
-        });
-        prevBtn.classList.toggle("hidden", step === 0);
-        nextBtn.classList.toggle("hidden", step === totalSteps - 1);
-        submitBtn.classList.toggle("hidden", step !== totalSteps - 1);
-        
-        // إخفاء قسم intro عندما تكون الخطوة أكبر من 0
-        const introSection = document.getElementById("intro");
-        if (introSection) {
-          introSection.classList.toggle("hidden", step > 0);
-        }
+      updateProgress();
+    }
 
-        updateProgress();
-      }
+    function validateStep(step) {
+      if (step === 0) return true;
+      const currentStepElement = steps[step];
+      const inputs = currentStepElement.querySelectorAll("input[required], select[required]");
+      let isValid = true;
 
-      function validateStep(step) {
-        if (step === 0) return true;
-        const currentStepElement = steps[step];
-        const inputs = currentStepElement.querySelectorAll("input[required], select[required]");
-        let isValid = true;
-
-        currentStepElement.querySelectorAll(".error-message").forEach((el) => {
-          el.style.display = "none";
-          const input = currentStepElement.querySelector(`[name="${el.getAttribute("data-for")}"]`);
-          if (input) input.classList.remove("error");
-        });
-
-        inputs.forEach((input) => {
-          let errorMessage = "";
-          if (!input.value) {
-            errorMessage = "هذا الحقل مطلوب";
-            isValid = false;
-          } else if (input.name === "weight" && (parseFloat(input.value) < 45 || parseFloat(input.value) > 250)) {
-            errorMessage = "الوزن يجب أن يكون بين 45 و 250 كغ";
-            isValid = false;
-          } else if (input.name === "height" && (parseFloat(input.value) < 130 || parseFloat(input.value) > 250)) {
-            errorMessage = "الطول يجب أن يكون بين 130 و 250 سم";
-            isValid = false;
-          }
-
-          if (errorMessage) {
-            input.classList.add("error");
-            const errorDiv = currentStepElement.querySelector(`.error-message[data-for="${input.name}"]`);
-            if (errorDiv) {
-              errorDiv.textContent = errorMessage;
-              errorDiv.style.display = "block";
-            }
-          } else {
-            input.classList.remove("error");
-          }
-        });
-
-        const checkboxes = currentStepElement.querySelectorAll('input[type="checkbox"][required]');
-        if (checkboxes.length > 0) {
-          const isAnyChecked = Array.from(checkboxes).some((cb) => cb.checked);
-          if (!isAnyChecked) isValid = false;
-        }
-
-        return isValid;
-      }
-
-      startBtn.addEventListener("click", () => {
-  currentStep = 1;
-  showStep(currentStep);
+      currentStepElement.querySelectorAll(".error-message").forEach((el) => {
+        el.style.display = "none";
+        const input = currentStepElement.querySelector(`[name="${el.getAttribute("data-for")}"]`);
+        if (input) input.classList.remove("error");
       });
 
-      nextBtn.addEventListener("click", () => {
-        if (validateStep(currentStep)) {
-          currentStep++;
-          showStep(currentStep);
+      inputs.forEach((input) => {
+        let errorMessage = "";
+        if (!input.value) {
+          errorMessage = "هذا الحقل مطلوب";
+          isValid = false;
+        } else if (input.name === "weight" && (parseFloat(input.value) < 45 || parseFloat(input.value) > 250)) {
+          errorMessage = "الوزن يجب أن يكون بين 45 و 250 كغ";
+          isValid = false;
+        } else if (input.name === "height" && (parseFloat(input.value) < 130 || parseFloat(input.value) > 250)) {
+          errorMessage = "الطول يجب أن يكون بين 130 و 250 سم";
+          isValid = false;
+        }
+
+        if (errorMessage) {
+          input.classList.add("error");
+          const errorDiv = currentStepElement.querySelector(`.error-message[data-for="${input.name}"]`);
+          if (errorDiv) {
+            errorDiv.textContent = errorMessage;
+            errorDiv.style.display = "block";
+          }
+        } else {
+          input.classList.remove("error");
         }
       });
 
-      prevBtn.addEventListener("click", () => {
-        currentStep--;
+      const checkboxes = currentStepElement.querySelectorAll('input[type="checkbox"][required]');
+      if (checkboxes.length > 0) {
+        const isAnyChecked = Array.from(checkboxes).some((cb) => cb.checked);
+        if (!isAnyChecked) isValid = false;
+      }
+
+      return isValid;
+    }
+
+    startBtn.addEventListener("click", () => {
+      currentStep = 1;
+      showStep(currentStep);
+    });
+
+    nextBtn.addEventListener("click", () => {
+      if (validateStep(currentStep)) {
+        currentStep++;
         showStep(currentStep);
-      });
+      }
+    });
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        if (validateStep(currentStep)) {
-          form.classList.add("hidden");
-          thankYou.classList.remove("hidden");
+    prevBtn.addEventListener("click", () => {
+      currentStep--;
+      showStep(currentStep);
+    });
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (validateStep(currentStep)) {
+        form.classList.add("hidden");
+        thankYou.classList.remove("hidden");
+      }
+    });
+
+    restartBtn.addEventListener("click", () => {
+      form.reset();
+      currentStep = 0;
+      showStep(currentStep);
+      form.classList.remove("hidden");
+      thankYou.classList.add("hidden");
+    });
+
+    document.querySelectorAll("select").forEach((select) => {
+      select.addEventListener("change", () => {
+        const otherInput = select.parentElement.querySelector('input[type="text"]');
+        if (otherInput) {
+          otherInput.classList.toggle("hidden", select.value !== "other");
+          if (select.value !== "other") otherInput.value = "";
         }
       });
+    });
 
-      restartBtn.addEventListener("click", () => {
-  form.reset();
-  currentStep = 0;
-  showStep(currentStep);
-  form.classList.remove("hidden");
-  thankYou.classList.add("hidden");
+    const langAr = document.getElementById("lang-ar");
+    const langEn = document.getElementById("lang-en");
+    const themeDark = document.getElementById("theme-dark");
+    const themeLight = document.getElementById("theme-light");
+
+    const translations = {
+      ar: {
+        title: "برنامج التغذية واللياقة المخصص",
+        subtitle: "املأ النموذج لتحصل على خطة غذائية ورياضية أسبوعية تناسبك 100٪",
+        offer: "🎉 عرض خاص: اشتراك 3 أشهر بـ 15 دينار فقط! 🎉",
+        prev: "السابق",
+        next: "التالي",
+        submit: "إرسال",
+        start: "ابدأ الآن",
+        thankYou: "شكراً لك! ✨",
+        thankYouMessage: "تم إرسال إجاباتك بنجاح. ستصلك خطتك الغذائية والرياضية خلال 24 ساعة.",
+        restart: "إعادة التعبئة",
+        subscriptionTitle: "اختر خطة الاشتراك",
+        introTitle: "ابدأ رحلتك نحو حياة أكثر صحة ونشاطًا! 💪",
+        introText: "انضم إلينا اليوم واكتشف برنامجًا غذائيًا ورياضيًا مصممًا خصيصًا لأهدافك! سواء كنت تسعى لفقدان الوزن، زيادة اللياقة، أو تحسين صحتك العامة، نحن هنا لدعمك في كل خطوة. املأ الاستبيان الآن واستعد لتحقيق النتائج التي تحلم بها!",
+        startTitle: "جاهز لتغيير حياتك؟",
+        startText: "فوت عبي الاستبيان والك تكون راضي عن نفسك! يلااا بسرعة، خذ دقيقة من وقتك!",
+        programLinks: {
+          nutrition: "عينة خطة غذائية",
+          fitness: "عينة خطة رياضية"
+        },
+        testimonialsTitle: "ماذا يقول عملاؤنا؟",
+        testimonials: [
+          { text: "غير هذا البرنامج حياتي! خسرت 10 كيلو في 3 أشهر وأشعر بالنشاط أكثر من أي وقت مضى!", name: "سارة، عمان" },
+          { text: "الخطة الغذائية كانت سهلة التطبيق ومناسبة لجدولي المزدحم. أنصح بها بشدة!", name: "أحمد، الزرقاء" },
+          { text: "الدعم المستمر والخطة الرياضية جعلتني أحب التمارين. النتائج مذهلة!", name: "لينا، إربد" }
+        ],
+        labels: {
+          full_name: "الاسم الكامل",
+          age: "العمر (بالسنوات)",
+          gender: "الجنس",
+          weight: "الوزن الحالي (كغ)",
+          height: "الطول (سم)",
+          target_weight: "الوزن المستهدف",
+          location: "محافظة الإقامة",
+          phone: "رقم الهاتف",
+          food_exclude: "الأطعمة التي لا ترغب بها",
+          allergy: "هل لديك حساسية غذائية؟",
+          digestive_issue: "مشاكل هضمية؟",
+          disease: "هل تعاني من أمراض؟",
+          diet: "نظام غذائي معين؟",
+          meals: "عدد الوجبات المفضلة؟",
+          home_meals: "وجبات من البيت؟",
+          soda: "مشروبات غازية أو طاقة؟",
+          emotional_eating: "نهم أو أكل عاطفي؟",
+          water: "كم كوب ماء يوميًا؟",
+          exercise_status: "هل تمارس الرياضة؟",
+          exercise_frequency: "كم مرة تمرن أسبوعيًا؟",
+          injury: "إصابات أو مشاكل صحية؟",
+          exercise_location: "مكان التمارين؟",
+          fitness_level: "مستوى اللياقة؟",
+          equipment: "أدوات رياضية في البيت؟",
+          workout_time: "أوقات التمرين؟",
+          daily_sugar: "تناول السكريات يوميًا؟",
+        },
+        options: {
+          gender: { male: "ذكر", female: "أنثى" },
+          location: {
+            Amman: "عمان",
+            Zarqa: "الزرقاء",
+            Irbid: "إربد",
+            Aqaba: "العقبة",
+            Madaba: "مادبا",
+            Ajloun: "عجلون",
+            Jerash: "جرش",
+            "Ma'an": "معان",
+            Karak: "الكرك",
+            Balqa: "البلقاء",
+            Mafraq: "المفرق",
+            Tafilah: "الطفيلة",
+          },
+          allergy: {
+            none: "لا",
+            gluten: "الغلوتين",
+            milk: "الحليب",
+            eggs: "البيض",
+            nuts: "المكسرات",
+            fish: "الأسماك",
+            soy: "الصويا",
+            other: "أخرى",
+          },
+          digestive_issue: {
+            none: "لا",
+            ibs: "القولون العصبي",
+            acidity: "الحموضة",
+            bloating: "الانتفاخ",
+            constipation: "الإمساك المزمن",
+            diarrhea: "الإسهال المتكرر",
+            discomfort: "عدم راحة بعد الطعام",
+            other: "أخرى",
+          },
+          disease: {
+            none: "لا",
+            diabetes: "سكري",
+            hypertension: "ارتفاع ضغط الدم",
+            insulin_resistance: "مقاومة الأنسولين",
+            other: "أخرى",
+          },
+          diet: {
+            none: "لا، أتناول كل شيء",
+            vegetarian: "نباتي",
+            vegan: "نباتي لا يتناول ألبان",
+            keto: "كيتو",
+            low_carb: "دايت منخفض الكربوهيدرات",
+            gluten_free: "بدون غلوتين",
+            lactose_free: "بدون لاكتوز",
+            other: "أخرى",
+          },
+          meals: {
+            3: "3 وجبات",
+            4: "4 وجبات",
+            5: "5 وجبات",
+            more: "أكثر من 5",
+            flexible: "حسب جدول عملي",
+          },
+          home_meals: {
+            home_only: "نعم، من البيت فقط",
+            sometimes_out: "نعم، ولكن أحيانًا أطلب من الخارج",
+            simple_recipes: "لا مانع من وصفات بسيطة",
+            ready_meals: "أرغب بوصفات جاهزة وسريعة",
+          },
+          soda: {
+            none: "لا",
+            sometimes: "أحيانًا",
+            daily: "يوميًا",
+            reduce: "أريد تقليلها",
+          },
+          emotional_eating: {
+            stress: "نعم عند التوتر أو الزعل",
+            boredom: "نعم عند الملل",
+            sometimes: "أحيانًا فقط",
+            none: "لا",
+          },
+          water: {
+            less_3: "أقل من 3 أكواب",
+            "3_5": "3–5 أكواب",
+            "6_8": "6–8 أكواب",
+            more_8: "أكثر من 8 أكواب",
+          },
+          exercise_status: {
+            regular: "نعم، بانتظام",
+            sometimes: "نعم، أحيانًا",
+            none: "لا أمارس حاليًا",
+            stopped: "كنت أتمرن سابقًا وتوقفت",
+          },
+          exercise_frequency: {
+            2: "يومان",
+            3: "3 أيام",
+            4: "4 أيام",
+            5: "5 أيام",
+            6: "6 أيام",
+            daily: "يوميًا",
+          },
+          injury: {
+            none: "لا",
+            knee: "مشاكل في الركب",
+            back: "مشاكل في الظهر",
+            breathing: "مشاكل في التنفس",
+            fitness: "ضعف في اللياقة",
+            other: "أخرى",
+          },
+          exercise_location: {
+            home: "في المنزل",
+            gym: "في النادي",
+            outdoor: "في الخارج (الحدائق)",
+            no_preference: "لا فرق",
+          },
+          fitness_level: {
+            beginner: "مبتدئ تمامًا",
+            intermediate: "متوسط",
+            advanced: "متقدم",
+          },
+          workout_time: {
+            morning_before: "صباحًا قبل العمل",
+            morning_after: "صباحًا بعد الإفطار",
+            afternoon: "بعد الظهر",
+            evening: "بعد المغرب",
+            night: "بعد العشاء",
+            flexible: "حسب وقت الفراغ",
+          },
+          daily_sugar: {
+            daily: "نعم، يوميًا",
+            sometimes: "أحيانًا",
+            none: "لا",
+            stress: "فقط عند التوتر",
+          },
+          food_exclude_checkboxes: {
+            fish: "الأسماك",
+            red_meat: "اللحوم الحمراء",
+            chicken: "الدجاج",
+            eggs: "البيض",
+            fried: "الأطعمة المقلية",
+            sweets: "السكريات والحلويات",
+            canned: "الأطعمة المعلبة",
+            white_bread: "الخبز الأبيض",
+            gluten: "الغلوتين",
+            dairy: "الحليب ومشتقاته",
+            none: "لا أرغب بإزالة أي نوع",
+          },
+          equipment_checkboxes: {
+            none: "لا يوجد",
+            mat: "بساط/فرشة",
+            dumbbells: "دامبلز",
+            resistance_bands: "مقاومات",
+            bike: "دراجة ثابتة",
+            treadmill: "جهاز سير",
+            other: "أخرى",
+          },
+        },
+        placeholders: {
+          allergy_other: "حدد الحساسية",
+          digestive_other: "حدد المشكلة",
+          disease_other: "حدد المرض",
+          diet_other: "حدد النظام",
+          injury_other: "حدد المشكلة",
+          equipment_other: "حدد الأداة",
+        },
+        errorMessages: {
+          required: "هذا الحقل مطلوب",
+          min_weight: "الوزن يجب أن لا يقل عن 45 كغ",
+          min_height: "الطول يجب أن لا يقل عن 130 سم",
+        },
+        themeLabels: {
+          dark: "داكن",
+          light: "فاتح"
+        }
+      },
+      en: {
+        title: "Customized Nutrition and Fitness Program",
+        subtitle: "Fill out the form to get a 100% personalized weekly nutrition and fitness plan",
+        offer: "🎉 Special Offer: 3-month subscription for only 15 JOD! 🎉",
+        prev: "Previous",
+        next: "Next",
+        submit: "Submit",
+        start: "Start Now",
+        thankYou: "Thank You! ✨",
+        thankYouMessage: "Your responses have been submitted successfully. You will receive your plan within 24 hours.",
+        restart: "Restart",
+        subscriptionTitle: "Choose a subscription plan",
+        introTitle: "Start Your Journey to a Healthier, More Active Life! 💪",
+        introText: "Join us today and discover a nutrition and fitness program tailored to your goals! Whether you're aiming to lose weight, boost fitness, or improve overall health, we're here to support you every step of the way. Fill out the survey now and get ready to achieve the results you dream of!",
+        startTitle: "Ready to Transform Your Life?",
+        startText: "Jump in, fill out the survey, and be proud of yourself! Come on, take one minute of your time!",
+        programLinks: {
+          nutrition: "Sample Nutrition Plan",
+          fitness: "Sample Fitness Plan"
+        },
+        testimonialsTitle: "What Our Clients Say",
+        testimonials: [
+          { text: "This program changed my life! I lost 10 kg in 3 months and feel more energetic than ever!", name: "Sarah, Amman" },
+          { text: "The nutrition plan was easy to follow and fit my busy schedule. Highly recommend!", name: "Ahmad, Zarqa" },
+          { text: "The ongoing support and fitness plan made me love working out. The results are amazing!", name: "Lina, Irbid" }
+        ],
+        labels: {
+          full_name: "Full Name",
+          age: "Age (in years)",
+          gender: "Gender",
+          weight: "Current Weight (kg)",
+          height: "Height (cm)",
+          target_weight: "Target Weight",
+          location: "City of Residence",
+          phone: "Phone Number",
+          food_exclude: "Foods to Exclude",
+          allergy: "Do you have a food allergy?",
+          digestive_issue: "Digestive Issues?",
+          disease: "Do you have medical conditions?",
+          diet: "Specific Diet?",
+          meals: "Preferred number of meals?",
+          home_meals: "Home-cooked Meals?",
+          soda: "Soft or Energy Drinks?",
+          emotional_eating: "Emotional Eating?",
+          water: "How many glasses of water daily?",
+          exercise_status: "Do you exercise?",
+          exercise_frequency: "How often do you work out weekly?",
+          injury: "Injuries or health issues?",
+          exercise_location: "Workout location?",
+          fitness_level: "Fitness Level?",
+          equipment: "Home gym equipment?",
+          workout_time: "Workout times?",
+          daily_sugar: "Daily sugar consumption?",
+        },
+        options: {
+          gender: { male: "Male", female: "Female" },
+          location: {
+            Amman: "Amman",
+            Zarqa: "Zarqa",
+            Irbid: "Irbid",
+            Aqaba: "Aqaba",
+            Madaba: "Madaba",
+            Ajloun: "Ajloun",
+            Jerash: "Jerash",
+            "Ma'an": "Ma'an",
+            Karak: "Karak",
+            Balqa: "Balqa",
+            Mafraq: "Mafraq",
+            Tafilah: "Tafilah",
+          },
+          allergy: {
+            none: "No",
+            gluten: "Gluten",
+            milk: "Milk",
+            eggs: "Eggs",
+            nuts: "Nuts",
+            fish: "Fish",
+            soy: "Soy",
+            other: "Other",
+          },
+          digestive_issue: {
+            none: "No",
+            ibs: "IBS",
+            acidity: "Acidity",
+            bloating: "Bloating",
+            constipation: "Chronic Constipation",
+            diarrhea: "Frequent Diarrhea",
+            discomfort: "Discomfort after eating",
+            other: "Other",
+          },
+          disease: {
+            none: "No",
+            diabetes: "Diabetes",
+            hypertension: "Hypertension",
+            insulin_resistance: "Insulin Resistance",
+            other: "Other",
+          },
+          diet: {
+            none: "No, I eat everything",
+            vegetarian: "Vegetarian",
+            vegan: "Vegan",
+            keto: "Keto",
+            low_carb: "Low-carb diet",
+            gluten_free: "Gluten-free",
+            lactose_free: "Lactose-free",
+            other: "Other",
+          },
+          meals: {
+            3: "3 meals",
+            4: "4 meals",
+            5: "5 meals",
+            more: "More than 5",
+            flexible: "Flexible based on my schedule",
+          },
+          home_meals: {
+            home_only: "Yes, only from home",
+            sometimes_out: "Yes, but sometimes I order out",
+            simple_recipes: "Simple recipes are okay",
+            ready_meals: "I want quick, ready-made recipes",
+          },
+          soda: {
+            none: "No",
+            sometimes: "Sometimes",
+            daily: "Daily",
+            reduce: "I want to reduce them",
+          },
+          emotional_eating: {
+            stress: "Yes, when stressed or sad",
+            boredom: "Yes, when bored",
+            sometimes: "Only sometimes",
+            none: "No",
+          },
+          water: {
+            less_3: "Less than 3 glasses",
+            "3_5": "3-5 glasses",
+            "6_8": "6-8 glasses",
+            more_8: "More than 8 glasses",
+          },
+          exercise_status: {
+            regular: "Yes, regularly",
+            sometimes: "Yes, sometimes",
+            none: "No, not currently",
+            stopped: "I used to work out but stopped",
+          },
+          exercise_frequency: {
+            2: "2 days",
+            3: "3 days",
+            4: "4 days",
+            5: "5 days",
+            6: "6 days",
+            daily: "Daily",
+          },
+          injury: {
+            none: "No",
+            knee: "Knee issues",
+            back: "Back issues",
+            breathing: "Breathing issues",
+            fitness: "Weak fitness level",
+            other: "Other",
+          },
+          exercise_location: {
+            home: "At home",
+            gym: "At the gym",
+            outdoor: "Outdoors (parks)",
+            no_preference: "No preference",
+          },
+          fitness_level: {
+            beginner: "Complete beginner",
+            intermediate: "Intermediate",
+            advanced: "Advanced",
+          },
+          workout_time: {
+            morning_before: "Morning before work",
+            morning_after: "Morning after breakfast",
+            afternoon: "Afternoon",
+            evening: "After Maghrib",
+            night: "After dinner",
+            flexible: "Whenever I have free time",
+          },
+          daily_sugar: {
+            daily: "Yes, daily",
+            sometimes: "Sometimes",
+            none: "No",
+            stress: "Only when stressed",
+          },
+          food_exclude_checkboxes: {
+            fish: "Fish",
+            red_meat: "Red Meat",
+            chicken: "Chicken",
+            eggs: "Eggs",
+            fried: "Fried Foods",
+            sweets: "Sweets & Desserts",
+            canned: "Canned Foods",
+            white_bread: "White Bread",
+            gluten: "Gluten",
+            dairy: "Milk & Dairy",
+            none: "I don't want to exclude anything",
+          },
+          equipment_checkboxes: {
+            none: "None",
+            mat: "Mat",
+            dumbbells: "Dumbbells",
+            resistance_bands: "Resistance Bands",
+            bike: "Stationary Bike",
+            treadmill: "Treadmill",
+            other: "Other",
+          },
+        },
+        placeholders: {
+          allergy_other: "Specify allergy",
+          digestive_other: "Specify issue",
+          disease_other: "Specify disease",
+          diet_other: "Specify diet",
+          injury_other: "Specify issue",
+          equipment_other: "Specify equipment",
+        },
+        errorMessages: {
+          required: "This field is required",
+          min_weight: "Weight cannot be less than 45 kg",
+          min_height: "Height cannot be less than 130 cm",
+        },
+        themeLabels: {
+          dark: "داكن",
+          light: "فاتح"
+        }
+      }
+    };
+
+    function updateLabels(lang) {
+      document.documentElement.lang = lang;
+      document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+      document.getElementById("lang-ar").classList.toggle("active-lang", lang === "ar");
+      document.getElementById("lang-en").classList.toggle("active-lang", lang === "en");
+
+      const t = translations[lang];
+      const introH2 = document.querySelector(".intro-container h2");
+      if (introH2) introH2.textContent = t.introTitle;
+      const introP = document.querySelector(".intro-container p");
+      if (introP) introP.textContent = t.introText;
+      const nutritionA = document.querySelector(".intro-container .program-links a:nth-child(1)");
+      if (nutritionA) nutritionA.textContent = t.programLinks.nutrition;
+      const fitnessA = document.querySelector(".intro-container .program-links a:nth-child(2)");
+      if (fitnessA) fitnessA.textContent = t.programLinks.fitness;
+      const testimonialsH2 = document.querySelector(".testimonials-container h2");
+      if (testimonialsH2) testimonialsH2.textContent = t.testimonialsTitle;
+      document.querySelectorAll(".testimonial-card").forEach((card, index) => {
+        const p = card.querySelector("p");
+        const span = card.querySelector("span");
+        if (p) p.textContent = t.testimonials[index]?.text || "";
+        if (span) span.textContent = t.testimonials[index]?.name || "";
+      });
+      const step0H2 = document.querySelector("#step-0 h2");
+      if (step0H2) step0H2.textContent = t.startTitle;
+      const step0P = document.querySelector("#step-0 p");
+      if (step0P) step0P.textContent = t.startText;
+      const startSurveyBtn = document.querySelector("#start-survey");
+      if (startSurveyBtn) startSurveyBtn.textContent = t.start;
+      const step1H1 = document.querySelector("#step-1 h1");
+      if (step1H1) step1H1.textContent = t.title;
+      const step1P1 = document.querySelector("#step-1 > div.text-center > p:nth-of-type(1)");
+      if (step1P1) step1P1.textContent = t.subtitle;
+      const step1P2 = document.querySelector("#step-1 > div.text-center > p:nth-of-type(2)");
+      if (step1P2) step1P2.textContent = t.offer;
+      if (prevBtn) prevBtn.textContent = t.prev;
+      if (nextBtn) nextBtn.textContent = t.next;
+      if (submitBtn) submitBtn.textContent = t.submit;
+      if (thankYou) {
+        const thankYouH2 = thankYou.querySelector("h2");
+        if (thankYouH2) thankYouH2.textContent = t.thankYou;
+        const thankYouP = thankYou.querySelector("p");
+        if (thankYouP) thankYouP.textContent = t.thankYouMessage;
+      }
+      if (restartBtn) restartBtn.textContent = t.restart;
+      const step5H2 = document.querySelector("#step-5 h2");
+      if (step5H2) step5H2.textContent = t.subscriptionTitle;
+      const themeDarkBtn = document.getElementById("theme-dark");
+      if (themeDarkBtn) themeDarkBtn.textContent = t.themeLabels.dark;
+      const themeLightBtn = document.getElementById("theme-light");
+      if (themeLightBtn) themeLightBtn.textContent = t.themeLabels.light;
+
+      document.querySelectorAll("label.block").forEach((label) => {
+        const inputName = label.nextElementSibling?.name || label.nextElementSibling?.id;
+        if (inputName && t.labels[inputName]) {
+          label.textContent = t.labels[inputName] + " *";
+        }
       });
 
       document.querySelectorAll("select").forEach((select) => {
-        select.addEventListener("change", () => {
-          const otherInput = select.parentElement.querySelector('input[type="text"]');
-          if (otherInput) {
-            otherInput.classList.toggle("hidden", select.value !== "other");
-            if (select.value !== "other") otherInput.value = "";
-          }
-        });
+        const selectOptions = t.options[select.name];
+        if (selectOptions) {
+          select.querySelectorAll('option:not([value=""])').forEach((option) => {
+            option.textContent = selectOptions[option.value];
+          });
+        }
       });
 
-      const langAr = document.getElementById("lang-ar");
-      const langEn = document.getElementById("lang-en");
-      const themeDark = document.getElementById("theme-dark");
-      const themeLight = document.getElementById("theme-light");
-
-      const translations = {
-        ar: {
-          title: "برنامج التغذية واللياقة المخصص",
-          subtitle: "املأ النموذج لتحصل على خطة غذائية ورياضية أسبوعية تناسبك 100٪",
-          offer: "🎉 عرض خاص: اشتراك 3 أشهر بـ 15 دينار فقط! 🎉",
-          prev: "السابق",
-          next: "التالي",
-          submit: "إرسال",
-          start: "ابدأ الآن",
-          thankYou: "شكراً لك! ✨",
-          thankYouMessage: "تم إرسال إجاباتك بنجاح. ستصلك خطتك الغذائية والرياضية خلال 24 ساعة.",
-          restart: "إعادة التعبئة",
-          subscriptionTitle: "اختر خطة الاشتراك",
-          introTitle: "ابدأ رحلتك نحو حياة أكثر صحة ونشاطًا! 💪",
-          introText: "انضم إلينا اليوم واكتشف برنامجًا غذائيًا ورياضيًا مصممًا خصيصًا لأهدافك! سواء كنت تسعى لفقدان الوزن، زيادة اللياقة، أو تحسين صحتك العامة، نحن هنا لدعمك في كل خطوة. املأ الاستبيان الآن واستعد لتحقيق النتائج التي تحلم بها!",
-          startTitle: "جاهز لتغيير حياتك؟",
-          startText: "فوت عبي الاستبيان والك تكون راضي عن نفسك! يلااا بسرعة، خذ دقيقة من وقتك!",
-          programLinks: {
-            nutrition: "عينة خطة غذائية",
-            fitness: "عينة خطة رياضية"
-          },
-          testimonialsTitle: "ماذا يقول عملاؤنا؟",
-          testimonials: [
-            { text: "غير هذا البرنامج حياتي! خسرت 10 كيلو في 3 أشهر وأشعر بالنشاط أكثر من أي وقت مضى!", name: "سارة، عمان" },
-            { text: "الخطة الغذائية كانت سهلة التطبيق ومناسبة لجدولي المزدحم. أنصح بها بشدة!", name: "أحمد، الزرقاء" },
-            { text: "الدعم المستمر والخطة الرياضية جعلتني أحب التمارين. النتائج مذهلة!", name: "لينا، إربد" }
-          ],
-          labels: {
-            full_name: "الاسم الكامل",
-            age: "العمر (بالسنوات)",
-            gender: "الجنس",
-            weight: "الوزن الحالي (كغ)",
-            height: "الطول (سم)",
-            target_weight: "الوزن المستهدف",
-            location: "محافظة الإقامة",
-            phone: "رقم الهاتف",
-            food_exclude: "الأطعمة التي لا ترغب بها",
-            allergy: "هل لديك حساسية غذائية؟",
-            digestive_issue: "مشاكل هضمية؟",
-            disease: "هل تعاني من أمراض؟",
-            diet: "نظام غذائي معين؟",
-            meals: "عدد الوجبات المفضلة؟",
-            home_meals: "وجبات من البيت؟",
-            soda: "مشروبات غازية أو طاقة؟",
-            emotional_eating: "نهم أو أكل عاطفي؟",
-            water: "كم كوب ماء يوميًا؟",
-            exercise_status: "هل تمارس الرياضة؟",
-            exercise_frequency: "كم مرة تمرن أسبوعيًا؟",
-            injury: "إصابات أو مشاكل صحية؟",
-            exercise_location: "مكان التمارين؟",
-            fitness_level: "مستوى اللياقة؟",
-            equipment: "أدوات رياضية في البيت؟",
-            workout_time: "أوقات التمرين؟",
-            daily_sugar: "تناول السكريات يوميًا؟",
-          },
-          options: {
-            gender: { male: "ذكر", female: "أنثى" },
-            location: {
-              Amman: "عمان",
-              Zarqa: "الزرقاء",
-              Irbid: "إربد",
-              Aqaba: "العقبة",
-              Madaba: "مادبا",
-              Ajloun: "عجلون",
-              Jerash: "جرش",
-              "Ma'an": "معان",
-              Karak: "الكرك",
-              Balqa: "البلقاء",
-              Mafraq: "المفرق",
-              Tafilah: "الطفيلة",
-            },
-            allergy: {
-              none: "لا",
-              gluten: "الغلوتين",
-              milk: "الحليب",
-              eggs: "البيض",
-              nuts: "المكسرات",
-              fish: "الأسماك",
-              soy: "الصويا",
-              other: "أخرى",
-            },
-            digestive_issue: {
-              none: "لا",
-              ibs: "القولون العصبي",
-              acidity: "الحموضة",
-              bloating: "الانتفاخ",
-              constipation: "الإمساك المزمن",
-              diarrhea: "الإسهال المتكرر",
-              discomfort: "عدم راحة بعد الطعام",
-              other: "أخرى",
-            },
-            disease: {
-              none: "لا",
-              diabetes: "سكري",
-              hypertension: "ارتفاع ضغط الدم",
-              insulin_resistance: "مقاومة الأنسولين",
-              other: "أخرى",
-            },
-            diet: {
-              none: "لا، أتناول كل شيء",
-              vegetarian: "نباتي",
-              vegan: "نباتي لا يتناول ألبان",
-              keto: "كيتو",
-              low_carb: "دايت منخفض الكربوهيدرات",
-              gluten_free: "بدون غلوتين",
-              lactose_free: "بدون لاكتوز",
-              other: "أخرى",
-            },
-            meals: {
-              3: "3 وجبات",
-              4: "4 وجبات",
-              5: "5 وجبات",
-              more: "أكثر من 5",
-              flexible: "حسب جدول عملي",
-            },
-            home_meals: {
-              home_only: "نعم، من البيت فقط",
-              sometimes_out: "نعم، ولكن أحيانًا أطلب من الخارج",
-              simple_recipes: "لا مانع من وصفات بسيطة",
-              ready_meals: "أرغب بوصفات جاهزة وسريعة",
-            },
-            soda: {
-              none: "لا",
-              sometimes: "أحيانًا",
-              daily: "يوميًا",
-              reduce: "أريد تقليلها",
-            },
-            emotional_eating: {
-              stress: "نعم عند التوتر أو الزعل",
-              boredom: "نعم عند الملل",
-              sometimes: "أحيانًا فقط",
-              none: "لا",
-            },
-            water: {
-              less_3: "أقل من 3 أكواب",
-              "3_5": "3–5 أكواب",
-              "6_8": "6–8 أكواب",
-              more_8: "أكثر من 8 أكواب",
-            },
-            exercise_status: {
-              regular: "نعم، بانتظام",
-              sometimes: "نعم، أحيانًا",
-              none: "لا أمارس حاليًا",
-              stopped: "كنت أتمرن سابقًا وتوقفت",
-            },
-            exercise_frequency: {
-              2: "يومان",
-              3: "3 أيام",
-              4: "4 أيام",
-              5: "5 أيام",
-              6: "6 أيام",
-              daily: "يوميًا",
-            },
-            injury: {
-              none: "لا",
-              knee: "مشاكل في الركب",
-              back: "مشاكل في الظهر",
-              breathing: "مشاكل في التنفس",
-              fitness: "ضعف في اللياقة",
-              other: "أخرى",
-            },
-            exercise_location: {
-              home: "في المنزل",
-              gym: "في النادي",
-              outdoor: "في الخارج (الحدائق)",
-              no_preference: "لا فرق",
-            },
-            fitness_level: {
-              beginner: "مبتدئ تمامًا",
-              intermediate: "متوسط",
-              advanced: "متقدم",
-            },
-            workout_time: {
-              morning_before: "صباحًا قبل العمل",
-              morning_after: "صباحًا بعد الإفطار",
-              afternoon: "بعد الظهر",
-              evening: "بعد المغرب",
-              night: "بعد العشاء",
-              flexible: "حسب وقت الفراغ",
-            },
-            daily_sugar: {
-              daily: "نعم، يوميًا",
-              sometimes: "أحيانًا",
-              none: "لا",
-              stress: "فقط عند التوتر",
-            },
-            food_exclude_checkboxes: {
-              fish: "الأسماك",
-              red_meat: "اللحوم الحمراء",
-              chicken: "الدجاج",
-              eggs: "البيض",
-              fried: "الأطعمة المقلية",
-              sweets: "السكريات والحلويات",
-              canned: "الأطعمة المعلبة",
-              white_bread: "الخبز الأبيض",
-              gluten: "الغلوتين",
-              dairy: "الحليب ومشتقاته",
-              none: "لا أرغب بإزالة أي نوع",
-            },
-            equipment_checkboxes: {
-              none: "لا يوجد",
-              mat: "بساط/فرشة",
-              dumbbells: "دامبلز",
-              resistance_bands: "مقاومات",
-              bike: "دراجة ثابتة",
-              treadmill: "جهاز سير",
-              other: "أخرى",
-            },
-          },
-          placeholders: {
-            allergy_other: "حدد الحساسية",
-            digestive_other: "حدد المشكلة",
-            disease_other: "حدد المرض",
-            diet_other: "حدد النظام",
-            injury_other: "حدد المشكلة",
-            equipment_other: "حدد الأداة",
-          },
-          errorMessages: {
-            required: "هذا الحقل مطلوب",
-            min_weight: "الوزن يجب أن لا يقل عن 45 كغ",
-            min_height: "الطول يجب أن لا يقل عن 130 سم",
-          },
-          themeLabels: {
-            dark: "داكن",
-            light: "فاتح"
-          }
-        },
-        en: {
-          title: "Customized Nutrition and Fitness Program",
-          subtitle: "Fill out the form to get a 100% personalized weekly nutrition and fitness plan",
-          offer: "🎉 Special Offer: 3-month subscription for only 15 JOD! 🎉",
-          prev: "Previous",
-          next: "Next",
-          submit: "Submit",
-          start: "Start Now",
-          thankYou: "Thank You! ✨",
-          thankYouMessage: "Your responses have been submitted successfully. You will receive your plan within 24 hours.",
-          restart: "Restart",
-          subscriptionTitle: "Choose a subscription plan",
-          introTitle: "Start Your Journey to a Healthier, More Active Life! 💪",
-          introText: "Join us today and discover a nutrition and fitness program tailored to your goals! Whether you're aiming to lose weight, boost fitness, or improve overall health, we're here to support you every step of the way. Fill out the survey now and get ready to achieve the results you dream of!",
-          startTitle: "Ready to Transform Your Life?",
-          startText: "Jump in, fill out the survey, and be proud of yourself! Come on, take one minute of your time!",
-          programLinks: {
-            nutrition: "Sample Nutrition Plan",
-            fitness: "Sample Fitness Plan"
-          },
-          testimonialsTitle: "What Our Clients Say",
-          testimonials: [
-            { text: "This program changed my life! I lost 10 kg in 3 months and feel more energetic than ever!", name: "Sarah, Amman" },
-            { text: "The nutrition plan was easy to follow and fit my busy schedule. Highly recommend!", name: "Ahmad, Zarqa" },
-            { text: "The ongoing support and fitness plan made me love working out. The results are amazing!", name: "Lina, Irbid" }
-          ],
-          labels: {
-            full_name: "Full Name",
-            age: "Age (in years)",
-            gender: "Gender",
-            weight: "Current Weight (kg)",
-            height: "Height (cm)",
-            target_weight: "Target Weight",
-            location: "City of Residence",
-            phone: "Phone Number",
-            food_exclude: "Foods to Exclude",
-            allergy: "Do you have a food allergy?",
-            digestive_issue: "Digestive Issues?",
-            disease: "Do you have medical conditions?",
-            diet: "Specific Diet?",
-            meals: "Preferred number of meals?",
-            home_meals: "Home-cooked Meals?",
-            soda: "Soft or Energy Drinks?",
-            emotional_eating: "Emotional Eating?",
-            water: "How many glasses of water daily?",
-            exercise_status: "Do you exercise?",
-            exercise_frequency: "How often do you work out weekly?",
-            injury: "Injuries or health issues?",
-            exercise_location: "Workout location?",
-            fitness_level: "Fitness Level?",
-            equipment: "Home gym equipment?",
-            workout_time: "Workout times?",
-            daily_sugar: "Daily sugar consumption?",
-          },
-          options: {
-            gender: { male: "Male", female: "Female" },
-            location: {
-              Amman: "Amman",
-              Zarqa: "Zarqa",
-              Irbid: "Irbid",
-              Aqaba: "Aqaba",
-              Madaba: "Madaba",
-              Ajloun: "Ajloun",
-              Jerash: "Jerash",
-              "Ma'an": "Ma'an",
-              Karak: "Karak",
-              Balqa: "Balqa",
-              Mafraq: "Mafraq",
-              Tafilah: "Tafilah",
-            },
-            allergy: {
-              none: "No",
-              gluten: "Gluten",
-              milk: "Milk",
-              eggs: "Eggs",
-              nuts: "Nuts",
-              fish: "Fish",
-              soy: "Soy",
-              other: "Other",
-            },
-            digestive_issue: {
-              none: "No",
-              ibs: "IBS",
-              acidity: "Acidity",
-              bloating: "Bloating",
-              constipation: "Chronic Constipation",
-              diarrhea: "Frequent Diarrhea",
-              discomfort: "Discomfort after eating",
-              other: "Other",
-            },
-            disease: {
-              none: "No",
-              diabetes: "Diabetes",
-              hypertension: "Hypertension",
-              insulin_resistance: "Insulin Resistance",
-              other: "Other",
-            },
-            diet: {
-              none: "No, I eat everything",
-              vegetarian: "Vegetarian",
-              vegan: "Vegan",
-              keto: "Keto",
-              low_carb: "Low-carb diet",
-              gluten_free: "Gluten-free",
-              lactose_free: "Lactose-free",
-              other: "Other",
-            },
-            meals: {
-              3: "3 meals",
-              4: "4 meals",
-              5: "5 meals",
-              more: "More than 5",
-              flexible: "Flexible based on my schedule",
-            },
-            home_meals: {
-              home_only: "Yes, only from home",
-              sometimes_out: "Yes, but sometimes I order out",
-              simple_recipes: "Simple recipes are okay",
-              ready_meals: "I want quick, ready-made recipes",
-            },
-            soda: {
-              none: "No",
-              sometimes: "Sometimes",
-              daily: "Daily",
-              reduce: "I want to reduce them",
-            },
-            emotional_eating: {
-              stress: "Yes, when stressed or sad",
-              boredom: "Yes, when bored",
-              sometimes: "Only sometimes",
-              none: "No",
-            },
-            water: {
-              less_3: "Less than 3 glasses",
-              "3_5": "3-5 glasses",
-              "6_8": "6-8 glasses",
-              more_8: "More than 8 glasses",
-            },
-            exercise_status: {
-              regular: "Yes, regularly",
-              sometimes: "Yes, sometimes",
-              none: "No, not currently",
-              stopped: "I used to work out but stopped",
-            },
-            exercise_frequency: {
-              2: "2 days",
-              3: "3 days",
-              4: "4 days",
-              5: "5 days",
-              6: "6 days",
-              daily: "Daily",
-            },
-            injury: {
-              none: "No",
-              knee: "Knee issues",
-              back: "Back issues",
-              breathing: "Breathing issues",
-              fitness: "Weak fitness level",
-              other: "Other",
-            },
-            exercise_location: {
-              home: "At home",
-              gym: "At the gym",
-              outdoor: "Outdoors (parks)",
-              no_preference: "No preference",
-            },
-            fitness_level: {
-              beginner: "Complete beginner",
-              intermediate: "Intermediate",
-              advanced: "Advanced",
-            },
-            workout_time: {
-              morning_before: "Morning before work",
-              morning_after: "Morning after breakfast",
-              afternoon: "Afternoon",
-              evening: "After Maghrib",
-              night: "After dinner",
-              flexible: "Whenever I have free time",
-            },
-            daily_sugar: {
-              daily: "Yes, daily",
-              sometimes: "Sometimes",
-              none: "No",
-              stress: "Only when stressed",
-            },
-            food_exclude_checkboxes: {
-              fish: "Fish",
-              red_meat: "Red Meat",
-              chicken: "Chicken",
-              eggs: "Eggs",
-              fried: "Fried Foods",
-              sweets: "Sweets & Desserts",
-              canned: "Canned Foods",
-              white_bread: "White Bread",
-              gluten: "Gluten",
-              dairy: "Milk & Dairy",
-              none: "I don't want to exclude anything",
-            },
-            equipment_checkboxes: {
-              none: "None",
-              mat: "Mat",
-              dumbbells: "Dumbbells",
-              resistance_bands: "Resistance Bands",
-              bike: "Stationary Bike",
-              treadmill: "Treadmill",
-              other: "Other",
-            },
-          },
-          placeholders: {
-            allergy_other: "Specify allergy",
-            digestive_other: "Specify issue",
-            disease_other: "Specify disease",
-            diet_other: "Specify diet",
-            injury_other: "Specify issue",
-            equipment_other: "Specify equipment",
-          },
-          errorMessages: {
-            required: "This field is required",
-            min_weight: "Weight cannot be less than 45 kg",
-            min_height: "Height cannot be less than 130 cm",
-          },
-          themeLabels: {
-            dark: "داكن",
-            light: "فاتح"
-          }
-        }
-      };
-
-      function updateLabels(lang) {
-        document.documentElement.lang = lang;
-        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-        document.getElementById("lang-ar").classList.toggle("active-lang", lang === "ar");
-        document.getElementById("lang-en").classList.toggle("active-lang", lang === "en");
-
-        const t = translations[lang];
-        const introH2 = document.querySelector(".intro-container h2");
-        if (introH2) introH2.textContent = t.introTitle;
-        const introP = document.querySelector(".intro-container p");
-        if (introP) introP.textContent = t.introText;
-        const nutritionA = document.querySelector(".intro-container .program-links a:nth-child(1)");
-        if (nutritionA) nutritionA.textContent = t.programLinks.nutrition;
-        const fitnessA = document.querySelector(".intro-container .program-links a:nth-child(2)");
-        if (fitnessA) fitnessA.textContent = t.programLinks.fitness;
-        const testimonialsH2 = document.querySelector(".testimonials-container h2");
-        if (testimonialsH2) testimonialsH2.textContent = t.testimonialsTitle;
-        document.querySelectorAll(".testimonial-card").forEach((card, index) => {
-          const p = card.querySelector("p");
-          const span = card.querySelector("span");
-          if (p) p.textContent = t.testimonials[index]?.text || "";
-          if (span) span.textContent = t.testimonials[index]?.name || "";
-        });
-        const step0H2 = document.querySelector("#step-0 h2");
-        if (step0H2) step0H2.textContent = t.startTitle;
-        const step0P = document.querySelector("#step-0 p");
-        if (step0P) step0P.textContent = t.startText;
-        const startSurveyBtn = document.querySelector("#start-survey");
-        if (startSurveyBtn) startSurveyBtn.textContent = t.start;
-        const step1H1 = document.querySelector("#step-1 h1");
-        if (step1H1) step1H1.textContent = t.title;
-        const step1P1 = document.querySelector("#step-1 > div.text-center > p:nth-of-type(1)");
-        if (step1P1) step1P1.textContent = t.subtitle;
-        const step1P2 = document.querySelector("#step-1 > div.text-center > p:nth-of-type(2)");
-        if (step1P2) step1P2.textContent = t.offer;
-        if (prevBtn) prevBtn.textContent = t.prev;
-        if (nextBtn) nextBtn.textContent = t.next;
-        if (submitBtn) submitBtn.textContent = t.submit;
-        if (thankYou) {
-          const thankYouH2 = thankYou.querySelector("h2");
-          if (thankYouH2) thankYouH2.textContent = t.thankYou;
-          const thankYouP = thankYou.querySelector("p");
-          if (thankYouP) thankYouP.textContent = t.thankYouMessage;
-        }
-        if (restartBtn) restartBtn.textContent = t.restart;
-        const step5H2 = document.querySelector("#step-5 h2");
-        if (step5H2) step5H2.textContent = t.subscriptionTitle;
-        const themeDarkBtn = document.getElementById("theme-dark");
-        if (themeDarkBtn) themeDarkBtn.textContent = t.themeLabels.dark;
-        const themeLightBtn = document.getElementById("theme-light");
-        if (themeLightBtn) themeLightBtn.textContent = t.themeLabels.light;
-
-        document.querySelectorAll("label.block").forEach((label) => {
-          const inputName = label.nextElementSibling?.name || label.nextElementSibling?.id;
-          if (inputName && t.labels[inputName]) {
-            label.textContent = t.labels[inputName] + " *";
-          }
-        });
-
-        document.querySelectorAll("select").forEach((select) => {
-          const selectOptions = t.options[select.name];
-          if (selectOptions) {
-            select.querySelectorAll('option:not([value=""])').forEach((option) => {
-              option.textContent = selectOptions[option.value];
-            });
-          }
-        });
-
-        document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-          const checkboxOptions = t.options[`${checkbox.name}_checkboxes`];
-          if (checkboxOptions) {
-            const label = checkbox.closest("label");
-            if (label) {
-              label.querySelector("span").textContent = checkboxOptions[checkbox.value];
-            }
-          }
-        });
-
-        document.querySelectorAll('input[type="radio"]').forEach((radio) => {
-          const label = radio.closest("label");
+      document.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+        const checkboxOptions = t.options[`${checkbox.name}_checkboxes`];
+        if (checkboxOptions) {
+          const label = checkbox.closest("label");
           if (label) {
-            if (radio.value === "10") {
-              label.querySelector("span").textContent = "10 " + (lang === "ar" ? "دنانير / شهر" : "JOD / month");
-            } else if (radio.value === "15") {
-              label.querySelector("span").innerHTML = "15 " + (lang === "ar" ? 'دينار / 3 أشهر <span class="text-green-300 font-bold">(عرض محدود)</span>' : 'JOD / 3 months <span class="text-green-300 font-bold">(Limited Offer)</span>');
-            } else if (radio.value === "45") {
-              label.querySelector("span").textContent = "45 " + (lang === "ar" ? "دينار / 6 أشهر" : "JOD / 6 months");
-            }
+            label.querySelector("span").textContent = checkboxOptions[checkbox.value];
           }
-        });
+        }
+      });
 
-        document.querySelectorAll('input[type="text"][placeholder]').forEach((input) => {
-          input.placeholder = t.placeholders[input.name];
-        });
-
-        document.querySelectorAll(".error-message").forEach((el) => {
-          const forInput = el.getAttribute("data-for");
-          if (forInput === "weight") {
-            el.textContent = t.errorMessages.min_weight;
-          } else if (forInput === "height") {
-            el.textContent = t.errorMessages.min_height;
-          } else {
-            el.textContent = t.errorMessages.required;
+      document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+        const label = radio.closest("label");
+        if (label) {
+          if (radio.value === "10") {
+            label.querySelector("span").textContent = "10 " + (lang === "ar" ? "دنانير / شهر" : "JOD / month");
+          } else if (radio.value === "15") {
+            label.querySelector("span").innerHTML = "15 " + (lang === "ar" ? 'دينار / 3 أشهر <span class="text-green-300 font-bold">(عرض محدود)</span>' : 'JOD / 3 months <span class="text-green-300 font-bold">(Limited Offer)</span>');
+          } else if (radio.value === "45") {
+            label.querySelector("span").textContent = "45 " + (lang === "ar" ? "دينار / 6 أشهر" : "JOD / 6 months");
           }
-        });
-      }
+        }
+      });
 
-      function updateTheme(theme) {
-        document.body.setAttribute("data-theme", theme);
-        const themeDarkBtn = document.getElementById("theme-dark");
-        const themeLightBtn = document.getElementById("theme-light");
-        if (themeDarkBtn) themeDarkBtn.classList.toggle("active-theme", theme === "dark");
-        if (themeLightBtn) themeLightBtn.classList.toggle("active-theme", theme === "light");
-      }
+      document.querySelectorAll('input[type="text"][placeholder]').forEach((input) => {
+        input.placeholder = t.placeholders[input.name];
+      });
 
-      const langArBtn = document.getElementById("lang-ar");
-      const langEnBtn = document.getElementById("lang-en");
+      document.querySelectorAll(".error-message").forEach((el) => {
+        const forInput = el.getAttribute("data-for");
+        if (forInput === "weight") {
+          el.textContent = t.errorMessages.min_weight;
+        } else if (forInput === "height") {
+          el.textContent = t.errorMessages.min_height;
+        } else {
+          el.textContent = t.errorMessages.required;
+        }
+      });
+    }
+
+    function updateTheme(theme) {
+      document.body.setAttribute("data-theme", theme);
       const themeDarkBtn = document.getElementById("theme-dark");
       const themeLightBtn = document.getElementById("theme-light");
-      if (langArBtn) langArBtn.addEventListener("click", () => updateLabels("ar"));
-      if (langEnBtn) langEnBtn.addEventListener("click", () => updateLabels("en"));
-      if (themeDarkBtn) themeDarkBtn.addEventListener("click", () => updateTheme("dark"));
-      if (themeLightBtn) themeLightBtn.addEventListener("click", () => updateTheme("light"));
+      if (themeDarkBtn) themeDarkBtn.classList.toggle("active-theme", theme === "dark");
+      if (themeLightBtn) themeLightBtn.classList.toggle("active-theme", theme === "light");
+    }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        showStep(0);
-        updateTheme("dark");
-        updateLabels("ar");
-        // تأكد من تفعيل زر ابدأ الآن بشكل صحيح
-        const startBtn = document.getElementById("start-survey");
-        if (startBtn) {
-          startBtn.onclick = function() {
-            currentStep = 1;
-            showStep(currentStep);
-          };
-        }
+    const langArBtn = document.getElementById("lang-ar");
+    const langEnBtn = document.getElementById("lang-en");
+    const themeDarkBtn = document.getElementById("theme-dark");
+    const themeLightBtn = document.getElementById("theme-light");
+    if (langArBtn) langArBtn.addEventListener("click", () => updateLabels("ar"));
+    if (langEnBtn) langEnBtn.addEventListener("click", () => updateLabels("en"));
+    if (themeDarkBtn) themeDarkBtn.addEventListener("click", () => updateTheme("dark"));
+    if (themeLightBtn) themeLightBtn.addEventListener("click", () => updateTheme("light"));
+
+    document.addEventListener("DOMContentLoaded", () => {
+      showStep(0);
+      updateTheme("dark");
+      updateLabels("ar");
+      // تأكد من تفعيل زر ابدأ الآن بشكل صحيح
+      const startBtn = document.getElementById("start-survey");
+      if (startBtn) {
+        startBtn.onclick = function () {
+          currentStep = 1;
+          showStep(currentStep);
+        };
+      }
     });
 
     // تفعيل زر واتساب بعد ظهور رسالة الشكر
     function enableWhatsappButton() {
       const whatsappBtn = document.getElementById("send-whatsapp");
       if (whatsappBtn) {
-        whatsappBtn.onclick = function() {
+        whatsappBtn.onclick = function () {
           const formData = new FormData(form);
           // تعريف المفاتيح بالعربي
           const labels = {
@@ -1444,7 +1581,7 @@
             morning_before: "صباحًا قبل العمل", morning_after: "صباحًا بعد الإفطار", afternoon: "بعد الظهر", evening: "بعد المغرب", night: "بعد العشاء", flexible: "حسب وقت الفراغ",
             "3_5": "3–5 أكواب", "6_8": "6–8 أكواب", less_3: "أقل من 3 أكواب", more_8: "أكثر من 8 أكواب",
             home: "في المنزل", gym: "في النادي", outdoor: "في الخارج", no_preference: "لا فرق",
-            subscription: {"10": "10 دنانير / شهر", "15": "15 دينار / 3 أشهر", "45": "45 دينار / 6 أشهر"},
+            subscription: { "10": "10 دنانير / شهر", "15": "15 دينار / 3 أشهر", "45": "45 دينار / 6 أشهر" },
             knee: "مشاكل في الركب", back: "مشاكل في الظهر", breathing: "مشاكل في التنفس", fitness: "ضعف اللياقة", injury_other: "أخرى"
           };
           let answers = {};
@@ -1489,6 +1626,7 @@
         enableWhatsappButton();
       }
     });
-    </script>
+  </script>
 </body>
+
 </html>
